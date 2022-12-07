@@ -43,7 +43,7 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="ModalAddToList" component={ModalAddToList}options={{ title: 'Was brauchst du?' }} />
+        <Stack.Screen name="ModalAddToList" component={ModalAddToList}options={{ title: 'Hinzufügen' }} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'card' }}>
         <Stack.Screen name="Modal" component={ModalScreen}options={{ title: 'Neues Rezept' }} />
