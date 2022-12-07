@@ -33,6 +33,7 @@ const linking: LinkingOptions<RootStackParamList> = {
         },
       },
       Modal: 'modal',
+      ModalAddToList: 'modalAddToList',
       NotFound: '*',
     },
   },

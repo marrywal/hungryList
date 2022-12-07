@@ -17,6 +17,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       paddingVertical: 10,
       paddingHorizontal: 20,
       borderBottomWidth: 0.25,
+      borderBottomColor: Colors[scheme].border,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',

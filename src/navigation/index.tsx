@@ -12,13 +12,14 @@ import { ColorSchemeName, Pressable } from 'react-native';
 
 import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ShoppingList from '../screens/ShoppingList';
 import Recipes from '../screens/Recipes';
 import Settings from '../screens/Settings';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import ModalAddToList from '../screens/ModalAddToList';
+import ModalScreen from '../screens/ModalScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -42,7 +43,10 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="ModalAddToList" component={ModalAddToList}options={{ title: 'Was brauchst du?' }} />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: 'card' }}>
+        <Stack.Screen name="Modal" component={ModalScreen}options={{ title: 'Neues Rezept' }} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -71,12 +75,12 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="shopping-cart" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('ModalAddToList')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <MaterialIcons
-                name="info"
+                name="add"
                 size={25}
                 color={Colors[colorScheme].tabIconDefault}
                 style={{ marginRight: 15 }}
