@@ -4,22 +4,22 @@ import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const DATA = [
   {
     category: "Alles", // TODO: Kategorien einbauen und sinnvoll machen
     data: [
       {
-        title: "Mehl",
+        title: "mehl",
         count: "300gr",
       },
       {
-        title: "Zucker",
+        title: "zucker",
         count: "2kg",
       },
       {
-        title: "Milch",
+        title: "milch",
         count: "3 St.",
       },
     ]
@@ -61,29 +61,29 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
   });
 
   const onItemClick = (item: any) => {
-    console.log(item); 
     const list = [...listItems];
     const index = list[0].data.indexOf(item)
     if (index > -1) {
       list[0].data.splice(index, 1);
-      setListItems(list); 
-    console.log(list[0].data)
+      setListItems(list);
     }
-
   }
 
-  const Item = ({ item }: { item: any }) => (
-    <Pressable
-      onPress={() => onItemClick(item)}
-      style={({ pressed }) => ({
-        opacity: pressed ? 0.7 : 1,
-      })}>
-      <View style={styles.item}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.count}>{item.count}</Text>
-      </View>
-    </Pressable>
-  );
+  const Item = ({ item }: { item: any }) => {
+    const itemTitle = item.title.charAt(0).toUpperCase() + item.title.slice(1);
+
+    return (
+      <Pressable
+        onPress={() => onItemClick(item)}
+        style={({ pressed }) => ({
+          opacity: pressed ? 0.7 : 1,
+        })}>
+        <View style={styles.item}>
+          <Text style={styles.title}>{itemTitle}</Text>
+          <Text style={styles.count}>{item.count}</Text>
+        </View>
+      </Pressable>)
+  };
 
   return (
     <SafeAreaView style={styles.container}>

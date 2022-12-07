@@ -1,23 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { Platform, StyleSheet, TextInput } from 'react-native';
 
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 
 export default function ModalAddToList() {
+  const [newItem, setNewItem] = useState('');
+
+  const saveNewItem = () => {
+    console.log(newItem) // TODO: save item
+  }
+
   return (
     <View style={styles.container}>
       <TextInput
+        value={newItem}
+        onChangeText={text => setNewItem(text)}
         style={styles.input}
         placeholder="Was brauchst du?"
         keyboardType="default"
         autoComplete='off'
         clearButtonMode='while-editing'
         enablesReturnKeyAutomatically={true}
-        onKeyPress={({ nativeEvent: { key: keyValue } }) => {
-          if (keyValue === 'enter') {
-            console.log('save item'); // TODO: save item
-          }
-        }}
+        autoFocus={true}
+        onSubmitEditing={saveNewItem}
       />
 
       {/* TODO: add autocomplete for items, maybe with icons */}
