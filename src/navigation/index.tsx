@@ -10,21 +10,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
-import Colors from '../constants/Colors';
+import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ShoppingList from '../screens/ShoppingList';
 import Recipes from '../screens/Recipes';
 import Settings from '../screens/Settings';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme ? NavigationColors[colorScheme] : NavigationColors['light']}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -78,7 +78,7 @@ function BottomTabNavigator() {
               <MaterialIcons
                 name="info"
                 size={25}
-                color={Colors[colorScheme].text}
+                color={Colors[colorScheme].tabIconDefault}
                 style={{ marginRight: 15 }}
               />
             </Pressable>
