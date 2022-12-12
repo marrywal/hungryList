@@ -43,10 +43,10 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="ModalAddToList" component={ModalAddToList}options={{ title: 'Hinzufügen' }} />
+        <Stack.Screen name="ModalAddToList" component={ModalAddToList} options={{ title: 'Hinzufügen' }} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'card' }}>
-        <Stack.Screen name="Modal" component={ModalScreen}options={{ title: 'Neues Rezept' }} />
+        <Stack.Screen name="Modal" component={ModalScreen} options={{ title: 'Neues Rezept' }} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -73,20 +73,6 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<'ShoppingList'>) => ({
           title: 'Einkaufsliste',
           tabBarIcon: ({ color }) => <TabBarIcon name="shopping-cart" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('ModalAddToList')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <MaterialIcons
-                name="add"
-                size={25}
-                color={Colors[colorScheme].tabIconDefault}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen

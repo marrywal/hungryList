@@ -1,34 +1,48 @@
-import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, GestureResponderEvent } from "react-native";
-
+import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView } from "react-native";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useHeaderHeight } from '@react-navigation/elements';
+import React from "react";
 
-const DATA = [
-  {
-    category: "Alles", // TODO: Kategorien einbauen und sinnvoll machen
-    data: [
-      {
-        title: "mehl",
-        count: "300gr",
-      },
-      {
-        title: "zucker",
-        count: "2kg",
-      },
-      {
-        title: "milch",
-        count: "3 St.",
-      },
-    ]
-  },
-];
+interface ShoppingList {
+  category: string;
+  data: {
+    title: string;
+    count: string;
+  }[];
+}
 
 export default function ShoppingList({ navigation }: RootTabScreenProps<'ShoppingList'>) {
-  const [listItems, setListItems] = useState(DATA);
+  const [listItems, setListItems] = useState<ShoppingList[]>([]);
+  const [retrieve, setRetrieve] = useState(true);
+  const [newItem, setNewItem] = useState('');
   const scheme = useColorScheme();
+  const headerHeight = useHeaderHeight();
+  const listRef = React.useRef<SectionList<{
+    title: string;
+    count: string;
+  }, ShoppingList>>(null)
+
+  useEffect(() => {
+    const retrieveData = async () => {
+      try {
+        const itemsString = await AsyncStorage.getItem('@shoppingList');
+        const allItems = itemsString ? JSON.parse(itemsString) : [];
+        setListItems(allItems);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (retrieve) {
+      retrieveData();
+      setRetrieve(false);
+    }
+  }, [retrieve]);
 
   const styles = StyleSheet.create({
     container: {
@@ -43,7 +57,8 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      backgroundColor: 'transparent'
     },
     header: {
       fontSize: 12,
@@ -57,7 +72,21 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     count: {
       fontSize: 14,
       color: Colors[scheme].secondaryText,
-    }
+    },
+    inputContainer: {
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderTopWidth: 0.25,
+      borderTopColor: Colors[scheme].border,
+    },
+    input: {
+      width: '100%',
+      backgroundColor: '#eee',
+      paddingVertical: 9,
+      paddingHorizontal: 13,
+      fontSize: 15,
+      borderRadius: 8,
+    },
   });
 
   const onItemClick = (item: any) => {
@@ -66,7 +95,38 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     if (index > -1) {
       list[0].data.splice(index, 1);
       setListItems(list);
+      AsyncStorage.setItem('@shoppingList', JSON.stringify(list));
     }
+  }
+
+  const saveNewItem = async () => {
+    const list = [...listItems];
+
+    list[0].data.push({
+      title: newItem,
+      count: ''
+    });
+
+    AsyncStorage.setItem('@shoppingList', JSON.stringify(list));
+    setListItems(list);
+
+    setNewItem('');
+
+
+
+
+    // listRef.current?.scrollToLocation({ animated: true,
+    //   itemIndex: 1,
+    //   sectionIndex: 0,
+    //   viewPosition: 1 })
+
+
+
+
+
+
+    //listRef.current.scrollToEnd({ animating: true });
+
   }
 
   const Item = ({ item }: { item: any }) => {
@@ -76,7 +136,10 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       <Pressable
         onPress={() => onItemClick(item)}
         style={({ pressed }) => ({
-          opacity: pressed ? 0.7 : 1,
+          //opacity: pressed ? 0.2 : 1,
+          backgroundColor: pressed
+            ? Colors[scheme].tintBackground
+            : Colors[scheme].background
         })}>
         <View style={styles.item}>
           <Text style={styles.title}>{itemTitle}</Text>
@@ -85,12 +148,13 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       </Pressable>)
   };
 
-  return (
+  return (<>
     <SafeAreaView style={styles.container}>
       <SectionList
         renderItem={({ item }) =>
           <Item item={item} />}
         sections={listItems}
+        ref={() => listRef}
       // keyExtractor={(item, index) => item + index} // TODO: kategorien wieder einblenden
       // renderSectionHeader={({ section: { title } }) => (
       //  <Text style={styles.header}>{title}</Text>
@@ -98,5 +162,29 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       // stickySectionHeadersEnabled={false}
       />
     </SafeAreaView>
+
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={headerHeight}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={newItem}
+            onChangeText={text => setNewItem(text)}
+            style={styles.input}
+            placeholder="Was brauchst du?"
+            keyboardType="default"
+            autoComplete='off'
+            clearButtonMode='while-editing'
+            enablesReturnKeyAutomatically={true}
+            blurOnSubmit={false}
+            onSubmitEditing={saveNewItem}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+
+  </>
   );
 }
