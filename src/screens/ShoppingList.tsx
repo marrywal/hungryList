@@ -81,11 +81,12 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     },
     input: {
       width: '100%',
-      backgroundColor: '#eee',
+      backgroundColor: Colors[scheme].input,
       paddingVertical: 9,
       paddingHorizontal: 13,
       fontSize: 15,
       borderRadius: 8,
+      color: Colors[scheme].text
     },
   });
 
