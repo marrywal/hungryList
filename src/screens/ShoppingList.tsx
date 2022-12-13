@@ -91,8 +91,19 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     }
   }
 
-  const saveNewItem = async () => {
-    const list = [...listItems];
+  const saveNewItem = () => {
+    let list = [...listItems];
+
+    if (newItem === '') {
+      return;
+    }
+
+    if (list.length === 0) {
+      list = [{
+        category: 'Alles',
+        data: []
+      }]
+    }
 
     list[0].data.push({
       title: newItem,
