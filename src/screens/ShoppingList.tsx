@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
@@ -68,6 +68,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       paddingHorizontal: 15,
       borderTopWidth: 0.25,
       borderTopColor: Colors[scheme].border,
+      backgroundColor: Colors[scheme].background,
     },
     input: {
       width: '100%',
