@@ -7,14 +7,7 @@ import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useHeaderHeight } from '@react-navigation/elements';
 import React from "react";
-
-interface ShoppingList {
-  category: string;
-  data: {
-    title: string;
-    count: string;
-  }[];
-}
+import { ShoppingItem, ShoppingList } from "../constants/interfaces";
 
 export default function ShoppingList({ navigation }: RootTabScreenProps<'ShoppingList'>) {
   const [listItems, setListItems] = useState<ShoppingList[]>([]);
@@ -22,10 +15,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
   const [newItem, setNewItem] = useState('');
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
-  const listRef = React.useRef<SectionList<{
-    title: string;
-    count: string;
-  }, ShoppingList>>(null)
+  const listRef = React.useRef<SectionList<ShoppingItem, ShoppingList>>(null)
 
   useEffect(() => {
     const retrieveData = async () => {
@@ -137,7 +127,6 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       <Pressable
         onPress={() => onItemClick(item)}
         style={({ pressed }) => ({
-          //opacity: pressed ? 0.2 : 1,
           backgroundColor: pressed
             ? Colors[scheme].tintBackground
             : Colors[scheme].background
@@ -185,7 +174,6 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-
   </>
   );
 }
