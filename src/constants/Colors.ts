@@ -5,6 +5,7 @@ const tintColorDark = '#006D75';
 export const Colors = {
   light: {
     text: '#000',
+    textOnTint: '#fff',
     secondaryText: '#666',
     background: '#fff',
     input: '#ededed',
@@ -16,6 +17,7 @@ export const Colors = {
   },
   dark: {
     text: '#e4e6eb',
+    textOnTint: '#18191a',
     secondaryText: '#b0b3b8',
     background: '#18191a',
     input: '#333',

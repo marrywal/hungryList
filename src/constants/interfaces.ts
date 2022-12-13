@@ -7,3 +7,15 @@ export interface _ShoppingList {
     category: string;
     data: _ShoppingItem[];
 }
+
+export interface _Ingredients {
+    name: string,
+    amount: string,
+    unit: string
+}
+
+export interface _Recipe {
+    title: string,
+    duration: string,
+    ingredients: _Ingredients[],
+}

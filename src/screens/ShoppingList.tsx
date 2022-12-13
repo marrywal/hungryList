@@ -1,5 +1,5 @@
-import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
-import { Text, View } from '../components/Themed';
+import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
+import { StyledTextInput, Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -69,16 +69,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       borderTopWidth: 0.25,
       borderTopColor: Colors[scheme].border,
       backgroundColor: Colors[scheme].background,
-    },
-    input: {
-      width: '100%',
-      backgroundColor: Colors[scheme].input,
-      paddingVertical: 9,
-      paddingHorizontal: 13,
-      fontSize: 15,
-      borderRadius: 8,
-      color: Colors[scheme].text
-    },
+    }
   });
 
   const onItemClick = (item: any) => {
@@ -171,10 +162,9 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inputContainer}>
-          <TextInput
+          <StyledTextInput
             value={newItem}
             onChangeText={text => setNewItem(text)}
-            style={styles.input}
             placeholder="Was brauchst du?"
             keyboardType="default"
             autoComplete='off'

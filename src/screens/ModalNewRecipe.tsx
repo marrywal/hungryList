@@ -1,26 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { Button, Keyboard, Platform, Pressable, SafeAreaView, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View } from '../components/Themed';
+import { StyledButtonGroup, StyledTextInput, Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import React from 'react';
-
-interface _Ingredients {
-  name: string,
-  amount: string,
-  unit: string
-}
-
-interface _Recipe {
-  title: string,
-  duration: string,
-  ingredients: _Ingredients[],
-}
+import { _Recipe } from '../constants/interfaces';
 
 export default function ModalNewRecipe() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
     duration: '',
@@ -36,14 +26,6 @@ export default function ModalNewRecipe() {
   const refDuration = React.useRef<TextInput | null>(null);
 
   const styles = StyleSheet.create({
-    input: {
-      backgroundColor: Colors[scheme].input,
-      paddingVertical: 9,
-      paddingHorizontal: 13,
-      marginBottom: 20,
-      fontSize: 15,
-      borderRadius: 8,
-    },
     input60: {
       width: '60%',
     },
@@ -83,6 +65,9 @@ export default function ModalNewRecipe() {
       paddingHorizontal: 15,
       paddingVertical: 10,
     },
+    input: {
+    marginBottom: 20
+    }
   });
 
   const saveNewItem = async () => {
@@ -109,10 +94,10 @@ export default function ModalNewRecipe() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView>
         <View style={styles.container}>
-          <TextInput
+          <StyledTextInput
             value={newRecipe.title}
-            onChangeText={text => setNewRecipe({ ...newRecipe, title: text })}
             style={styles.input}
+            onChangeText={text => setNewRecipe({ ...newRecipe, title: text })}
             placeholder="Titel"
             keyboardType="default"
             autoComplete='off'
@@ -124,10 +109,10 @@ export default function ModalNewRecipe() {
             onSubmitEditing={() => refDuration.current?.focus()}
           />
 
-          <TextInput
+          <StyledTextInput
             value={newRecipe.duration}
-            onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
             style={styles.input}
+            onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
             placeholder="Aufwand | Zeit"
             keyboardType="default"
             autoComplete='off'
@@ -135,9 +120,22 @@ export default function ModalNewRecipe() {
             enablesReturnKeyAutomatically={true}
             returnKeyType="next"
             blurOnSubmit={false}
-            ref={refDuration}
+            //ref={refDuration}
           // onSubmitEditing={() => refDuration.current?.focus()}
           />
+
+          <View>
+            <StyledButtonGroup
+              buttons={['Snack', 'Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk']}
+              selectedIndex={selectedIndex}
+              onPress={(value) => {
+                setSelectedIndex(value);
+              }}
+            />
+          </View>
+
+
+
 
         </View>
 
@@ -146,10 +144,10 @@ export default function ModalNewRecipe() {
 
         {newRecipe.ingredients.map((ingredient, index) => {
           return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
-            <TextInput
+            <StyledTextInput
               value={ingredient.name}
-              onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], name: text }] })}
               style={styles.input}
+              onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], name: text }] })}
               placeholder="Zutat"
               keyboardType="default"
               autoComplete='off'
@@ -162,10 +160,10 @@ export default function ModalNewRecipe() {
 
             <View style={styles.inputBox2}>
               <View style={styles.input60}>
-                <TextInput
+                <StyledTextInput
                   value={ingredient.amount}
-                  onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], amount: text }] })}
                   style={styles.input}
+                  onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], amount: text }] })}
                   placeholder="Menge"
                   keyboardType="numeric"
                   autoComplete='off'
@@ -178,7 +176,7 @@ export default function ModalNewRecipe() {
                 />
               </View>
               <View style={styles.input40}>
-                <TextInput
+                <StyledTextInput
                   value={ingredient.unit}
                   onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], unit: text }] })}
                   style={{ ...styles.input, marginLeft: 15 }}
@@ -223,6 +221,6 @@ export default function ModalNewRecipe() {
         <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
       </SafeAreaView>
 
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback >
   );
 }

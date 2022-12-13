@@ -9,6 +9,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const DATA = [
   {
+    title: "Snacks",
+    data: [
+      {
+        title: 'Kartoffelchips'
+      },
+    ]
+  },
+  {
     title: "Vorspeisen",
     data: [
       {
