@@ -1,9 +1,9 @@
-export interface ShoppingItem {
+export interface _ShoppingItem {
     title: string;
     count: string;
 }
 
-export interface ShoppingList {
+export interface _ShoppingList {
     category: string;
-    data: ShoppingItem[];
+    data: _ShoppingItem[];
 }
