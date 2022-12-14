@@ -5,10 +5,10 @@
  */
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer} from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, Route, View } from 'react-native';
 
 import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -30,6 +30,20 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   );
 }
 
+function getHeaderTitle(route: any): string {
+  const routeName = getFocusedRouteNameFromRoute(route);
+
+  switch (routeName) {
+    case 'ShoppingList':
+      return 'Einkaufsliste';
+    case 'Recipes':
+      return 'Meine Rezepte';
+    case 'Settings':
+      return 'Einstellungen';
+  }
+  return 'Einkaufsliste';
+}
+
 /**
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
@@ -37,12 +51,55 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const colorScheme = useColorScheme();
+
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].tint,
+        },
+        headerTintColor: Colors[colorScheme].textOnTint,
+      }}>
+      <Stack.Screen name="Root" component={BottomTabNavigator} options={({ route, navigation }) => ({
+        title: getHeaderTitle(route),
+        headerRight: () => {
+          return <Pressable
+            onPress={() => navigation.navigate('ModalNewRecipe')}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+              width: 28,
+              height: 28
+            })}>
+            {getHeaderTitle(route) === 'Meine Rezepte'
+              ? <MaterialIcons
+                name="add"
+                size={28}
+                color={Colors[colorScheme].textOnTint} />
+              : <></>}
+          </Pressable>
+        }
+      })} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe} options={{ title: 'Neues Rezept' }} />
+        <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe}
+          options={({ navigation }) => ({
+            title: 'Neues Rezept',
+            headerRight: () => (
+              <Pressable
+                onPress={() => navigation.navigate('Recipes')}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <MaterialIcons
+                  name="save"
+                  size={25}
+                  color={Colors[colorScheme].textOnTint}
+                />
+              </Pressable>
+            ),
+          })}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -62,6 +119,7 @@ function BottomTabNavigator() {
       initialRouteName="ShoppingList"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerShown: false
       }}>
       <BottomTab.Screen
         name="ShoppingList"
@@ -75,22 +133,8 @@ function BottomTabNavigator() {
         name="Recipes"
         component={Recipes}
         options={({ navigation }: RootTabScreenProps<'Recipes'>) => ({
-          title: 'Meine Rezepte',
-          tabBarIcon: ({ color }) => <TabBarIcon name="fastfood" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('ModalNewRecipe')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <MaterialIcons
-                name="add"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
+          headerTitle: 'Meine Rezepte',
+          tabBarIcon: ({ color }) => <TabBarIcon name="fastfood" color={color} />
         })}
       />
       <BottomTab.Screen
