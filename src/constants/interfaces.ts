@@ -17,5 +17,6 @@ export interface _Ingredients {
 export interface _Recipe {
     title: string,
     duration: string,
+    category: 'Snack' | 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk',
     ingredients: _Ingredients[],
 }

@@ -45,7 +45,7 @@ export function View(props: ViewProps) {
   return <DefaultView style={[style]} {...otherProps} />;
 }
 
-export function StyledTextInput(props: TextInputProps) {
+export const StyledTextInput = React.forwardRef((props: TextInputProps, ref: React.ForwardedRef<TextInput>) => {
   const scheme = useColorScheme();
   const { style, ...otherProps } = props;
 
@@ -57,8 +57,8 @@ export function StyledTextInput(props: TextInputProps) {
     borderRadius: 8,
   }
 
-  return <TextInput style={[{ ...themedStyle }, style]} {...otherProps} />;
-}
+  return <TextInput ref={ref} style={[{ ...themedStyle }, style]} {...otherProps} />;
+})
 
 export function StyledButtonGroup(props: ButtonGroupProps) {
   const scheme = useColorScheme();

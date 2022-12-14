@@ -14,6 +14,7 @@ export default function ModalNewRecipe() {
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
     duration: '',
+    category: 'Snack',
     ingredients: [{
       name: '',
       amount: '',
@@ -22,8 +23,7 @@ export default function ModalNewRecipe() {
   });
   const scheme = useColorScheme();
 
-  const refName = React.useRef<any>(null)
-  const refDuration = React.useRef<TextInput | null>(null);
+  // const refDuration = React.useRef<TextInput | null>(null);
 
   const styles = StyleSheet.create({
     input60: {
@@ -106,7 +106,7 @@ export default function ModalNewRecipe() {
             autoFocus={true}
             returnKeyType="next"
             blurOnSubmit={false}
-            onSubmitEditing={() => refDuration.current?.focus()}
+            // onSubmitEditing={() => refDuration.current?.focus()}
           />
 
           <StyledTextInput
@@ -120,7 +120,7 @@ export default function ModalNewRecipe() {
             enablesReturnKeyAutomatically={true}
             returnKeyType="next"
             blurOnSubmit={false}
-            //ref={refDuration}
+            // ref={refDuration}
           // onSubmitEditing={() => refDuration.current?.focus()}
           />
 
@@ -128,9 +128,7 @@ export default function ModalNewRecipe() {
             <StyledButtonGroup
               buttons={['Snack', 'Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk']}
               selectedIndex={selectedIndex}
-              onPress={(value) => {
-                setSelectedIndex(value);
-              }}
+              onPress={text => setNewRecipe({ ...newRecipe, category: text })}
             />
           </View>
 
