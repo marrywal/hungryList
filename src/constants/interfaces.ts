@@ -14,9 +14,11 @@ export interface _Ingredients {
     unit: string
 }
 
+export type _Category = 'Snack' | 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk';
+
 export interface _Recipe {
     title: string,
     duration: string,
-    category: 'Snack' | 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk',
+    category: _Category,
     ingredients: _Ingredients[],
 }

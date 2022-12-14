@@ -91,7 +91,6 @@ function RootNavigator() {
                 style={({ pressed }) => ({
                   opacity: pressed ? 0.5 : 1,
                 })}>
-                  {/* <Text style={{color: Colors[colorScheme].textOnTint, fontWeight: 'bold', fontSize: 16}}>Speichern</Text> */}
                 <MaterialIcons
                   name="check"
                   size={32}

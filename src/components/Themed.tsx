@@ -55,6 +55,7 @@ export const StyledTextInput = React.forwardRef((props: TextInputProps, ref: Rea
     paddingHorizontal: 13,
     fontSize: 15,
     borderRadius: 8,
+    color: Colors[scheme].text
   }
 
   return <TextInput ref={ref} style={[{ ...themedStyle }, style]} {...otherProps} />;

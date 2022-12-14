@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useHeaderHeight } from '@react-navigation/elements';
 import React from "react";
 import { _ShoppingItem, _ShoppingList } from "../constants/interfaces";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ShoppingList({ navigation }: RootTabScreenProps<'ShoppingList'>) {
   const [listItems, setListItems] = useState<_ShoppingList[]>([]);
@@ -69,6 +70,21 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       borderTopWidth: 0.25,
       borderTopColor: Colors[scheme].border,
       backgroundColor: Colors[scheme].background,
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    sendInput: {
+      flexGrow: 1
+    },
+    sendButton: {
+      backgroundColor: Colors[scheme].tint,
+      borderRadius: 10,
+      width: 36,
+      height: 36,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: 10
     }
   });
 
@@ -124,7 +140,8 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
   }
 
   const Item = ({ item }: { item: any }) => {
-    const itemTitle = item.title.charAt(0).toUpperCase() + item.title.slice(1);
+    const title = item.title.trim();
+    const itemTitle = title.charAt(0).toUpperCase() + title.slice(1);
 
     return (
       <Pressable
@@ -164,6 +181,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
         <View style={styles.inputContainer}>
           <StyledTextInput
             value={newItem}
+            style={styles.sendInput}
             onChangeText={text => setNewItem(text)}
             placeholder="Was brauchst du?"
             keyboardType="default"
@@ -173,6 +191,20 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
             blurOnSubmit={false}
             onSubmitEditing={saveNewItem}
           />
+          <Pressable
+            disabled={newItem === '' ? true : false}
+            onPress={saveNewItem}
+            style={({ pressed }) => ({
+              opacity: pressed || newItem === '' ? 0.5 : 1
+            })}>
+            <View style={styles.sendButton}>
+              <MaterialIcons
+                name="add"
+                size={28}
+                color={Colors[scheme].textOnTint}
+              />
+            </View>
+          </Pressable>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
