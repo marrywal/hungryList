@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable, Route, View } from 'react-native';
+import { ColorSchemeName, Pressable, Route, View, Text } from 'react-native';
 
 import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -68,13 +68,13 @@ function RootNavigator() {
             onPress={() => navigation.navigate('ModalNewRecipe')}
             style={({ pressed }) => ({
               opacity: pressed ? 0.5 : 1,
-              width: 28,
-              height: 28
+              width: 36,
+              height: 36
             })}>
             {getHeaderTitle(route) === 'Meine Rezepte'
               ? <MaterialIcons
                 name="add"
-                size={28}
+                size={36}
                 color={Colors[colorScheme].textOnTint} />
               : <></>}
           </Pressable>
@@ -91,9 +91,10 @@ function RootNavigator() {
                 style={({ pressed }) => ({
                   opacity: pressed ? 0.5 : 1,
                 })}>
+                  {/* <Text style={{color: Colors[colorScheme].textOnTint, fontWeight: 'bold', fontSize: 16}}>Speichern</Text> */}
                 <MaterialIcons
-                  name="save"
-                  size={25}
+                  name="check"
+                  size={32}
                   color={Colors[colorScheme].textOnTint}
                 />
               </Pressable>
