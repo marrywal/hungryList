@@ -8,6 +8,7 @@ import { Colors } from "../constants/Colors";
 import React from 'react';
 import { _Category, _Ingredients, _PrepSteps, _Recipe } from '../constants/interfaces';
 import { useHeaderHeight } from '@react-navigation/elements';
+import { StyledSwipeable } from '../components/StyledSwipeable';
 
 export default function ModalNewRecipe() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -71,7 +72,8 @@ export default function ModalNewRecipe() {
     inputMultiline: {
       minHeight: 55,
       maxHeight: 90,
-      paddingTop: 9
+      paddingTop: 9,
+      color: Colors[scheme].text
     },
     saveButton: {
       backgroundColor: Colors[scheme].tint,
@@ -125,10 +127,13 @@ export default function ModalNewRecipe() {
 
   const addNewIngredient = () => {
     const ingred = [...allIngredients];
-    const index = ingred.length;
+    const lastObj = ingred.slice(-1);
+    const lastKey = lastObj[0]?.key;
+
+    const newKey = lastKey ? lastKey + 1 : 1;
 
     const newIngred = {
-      key: index,
+      key: newKey,
       name: '',
       amount: '',
       unit: ''
@@ -140,10 +145,13 @@ export default function ModalNewRecipe() {
 
   const addNewPrepStep = () => {
     const preps = [...allPrepSteps];
-    const index = preps.length;
+    const lastObj = preps.slice(-1);
+    const lastKey = lastObj[0]?.key;
+
+    const newKey = lastKey ? lastKey + 1 : 1;
 
     const newPrep = {
-      key: index,
+      key: newKey,
       step: ''
     }
 
@@ -170,6 +178,19 @@ export default function ModalNewRecipe() {
 
     // setNewItem('');
   }
+
+
+  const deleteIngredientsRow = (index: number) => {
+    const ingred = [...allIngredients];
+    ingred.splice(index, 1);
+    setAllIngedients(ingred);
+  };
+
+  const deletePrepStepsRow = (index: number) => {
+    const preps = [...allPrepSteps];
+    preps.splice(index, 1);
+    setAllPrepSteps(preps);
+  };
 
   return (<>
     <ScrollView>
@@ -222,55 +243,60 @@ export default function ModalNewRecipe() {
             <Text style={styles.title}>Zutaten ({allIngredients.length})</Text>
 
             {allIngredients.map((ingredient, index) => {
-              return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
-                <StyledTextInput
-                  value={ingredient.name}
-                  style={styles.input}
-                  onChangeText={text => editIngredient(text, index, 'name')}
-                  placeholder="Zutat"
-                  keyboardType="default"
-                  autoComplete='off'
-                  clearButtonMode='while-editing'
-                  enablesReturnKeyAutomatically={true}
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                // onSubmitEditing={() => refDuration.current?.focus()}
-                />
-                <View style={styles.inputBox2}>
-                  <View style={styles.input60}>
-                    <StyledTextInput
-                      value={ingredient.amount}
-                      style={styles.input}
-                      onChangeText={text => editIngredient(text, index, 'amount')}
-                      placeholder="Menge"
-                      keyboardType="numeric"
-                      autoComplete='off'
-                      clearButtonMode='while-editing'
-                      enablesReturnKeyAutomatically={true}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                    // ref={refDuration}
-                    // onSubmitEditing={() => refDuration.current?.focus()}
-                    />
-                  </View>
-                  <View style={styles.input40}>
-                    <StyledTextInput
-                      value={ingredient.unit}
-                      onChangeText={text => editIngredient(text, index, 'unit')}
-                      style={{ ...styles.input, marginLeft: 15 }}
-                      placeholder="Einheit"
-                      keyboardType="default"
-                      autoComplete='off'
-                      clearButtonMode='while-editing'
-                      enablesReturnKeyAutomatically={true}
-                      returnKeyType="next"
-                      blurOnSubmit={false}
-                    // ref={refDuration}
-                    // onSubmitEditing={() => refDuration.current?.focus()}
-                    />
+              return <StyledSwipeable
+                deleteRow={() => deleteIngredientsRow(index)}
+                key={ingredient.key}
+              >
+                <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                  <StyledTextInput
+                    value={ingredient.name}
+                    style={styles.input}
+                    onChangeText={text => editIngredient(text, index, 'name')}
+                    placeholder="Zutat"
+                    keyboardType="default"
+                    autoComplete='off'
+                    clearButtonMode='while-editing'
+                    enablesReturnKeyAutomatically={true}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                  // onSubmitEditing={() => refDuration.current?.focus()}
+                  />
+                  <View style={styles.inputBox2}>
+                    <View style={styles.input60}>
+                      <StyledTextInput
+                        value={ingredient.amount}
+                        style={styles.input}
+                        onChangeText={text => editIngredient(text, index, 'amount')}
+                        placeholder="Menge"
+                        keyboardType="numeric"
+                        autoComplete='off'
+                        clearButtonMode='while-editing'
+                        enablesReturnKeyAutomatically={true}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                      // ref={refDuration}
+                      // onSubmitEditing={() => refDuration.current?.focus()}
+                      />
+                    </View>
+                    <View style={styles.input40}>
+                      <StyledTextInput
+                        value={ingredient.unit}
+                        onChangeText={text => editIngredient(text, index, 'unit')}
+                        style={{ ...styles.input, marginLeft: 15 }}
+                        placeholder="Einheit"
+                        keyboardType="default"
+                        autoComplete='off'
+                        clearButtonMode='while-editing'
+                        enablesReturnKeyAutomatically={true}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                      // ref={refDuration}
+                      // onSubmitEditing={() => refDuration.current?.focus()}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
+              </StyledSwipeable>
             })}
 
             <Pressable
@@ -290,24 +316,29 @@ export default function ModalNewRecipe() {
             <Text style={styles.title}>Zubereitung ({allPrepSteps.length})</Text>
 
             {allPrepSteps.map((prep, index) => {
-              return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
-                <StyledTextInput
-                  value={prep.step}
-                  style={{ ...styles.input, ...styles.inputMultiline }}
-                  onChangeText={text => editPrepSteps(text, index)}
-                  placeholder="Zubereitungsschritt"
-                  keyboardType="default"
-                  autoComplete='off'
-                  clearButtonMode='while-editing'
-                  enablesReturnKeyAutomatically={true}
-                  // returnKeyType="next"
-                  multiline={true}
-                  textAlignVertical="top"
-                  numberOfLines={3}
-                // blurOnSubmit={false}
-                // onSubmitEditing={() => refDuration.current?.focus()}
-                />
-              </View>
+              return <StyledSwipeable
+                deleteRow={() => deletePrepStepsRow(index)}
+                key={prep.key}
+              >
+                <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                  <StyledTextInput
+                    value={prep.step}
+                    style={{ ...styles.input, ...styles.inputMultiline }}
+                    onChangeText={text => editPrepSteps(text, index)}
+                    placeholder="Zubereitungsschritt"
+                    keyboardType="default"
+                    autoComplete='off'
+                    clearButtonMode='while-editing'
+                    enablesReturnKeyAutomatically={true}
+                    // returnKeyType="next"
+                    multiline={true}
+                    textAlignVertical="top"
+                    numberOfLines={3}
+                  // blurOnSubmit={false}
+                  // onSubmitEditing={() => refDuration.current?.focus()}
+                  />
+                </View>
+              </StyledSwipeable>
             })}
 
             <Pressable

@@ -58,7 +58,11 @@ export const StyledTextInput = React.forwardRef((props: TextInputProps, ref: Rea
     color: Colors[scheme].text
   }
 
-  return <TextInput ref={ref} style={[{ ...themedStyle }, style]} {...otherProps} />;
+  return <TextInput 
+  placeholderTextColor={Colors[scheme].placeholder}
+  ref={ref} 
+  style={[{ ...themedStyle }, style]} 
+  {...otherProps} />;
 })
 
 export function StyledButtonGroup(props: ButtonGroupProps) {
