@@ -6,26 +6,19 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import React from 'react';
-import { _Category, _Recipe } from '../constants/interfaces';
+import { _Category, _Ingredients, _PrepSteps, _Recipe } from '../constants/interfaces';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ModalNewRecipe() {
-  const newIngredient = {
-    name: '',
-    amount: '',
-    unit: ''
-  }
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
+  const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
     duration: '',
     category: 'Snack',
-    ingredients: [{
-      name: '',
-      amount: '',
-      unit: ''
-    }],
+    ingredients: [],
+    prepSteps: [],
   });
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
@@ -75,6 +68,11 @@ export default function ModalNewRecipe() {
     input: {
       marginBottom: 20
     },
+    inputMultiline: {
+      minHeight: 55,
+      maxHeight: 90,
+      paddingTop: 9
+    },
     saveButton: {
       backgroundColor: Colors[scheme].tint,
       borderRadius: 10,
@@ -111,19 +109,46 @@ export default function ModalNewRecipe() {
     setNewRecipe({ ...newRecipe, category: categories[value] });
   }
 
-  const addNewIngredient = () => {
-    console.log(newRecipe)
-    let allIngredients = [...newRecipe.ingredients];
+  const editIngredient = (value: string, index: number, field: 'name' | 'amount' | 'unit') => {
+    let ingred = [...allIngredients];
+    ingred[index][field] = value;
 
-    allIngredients.push({ ...newIngredient });
-
-    setNewRecipe({ ...newRecipe, ingredients: allIngredients });
-
-    console.log(newRecipe)
+    setAllIngedients(ingred);
   }
 
-  const addNewPreparationStep = () => {
-    console.log('new step')
+  const editPrepSteps = (value: string, index: number) => {
+    let preps = [...allPrepSteps];
+    preps[index].step = value;
+
+    setAllPrepSteps(preps);
+  }
+
+  const addNewIngredient = () => {
+    const ingred = [...allIngredients];
+    const index = ingred.length;
+
+    const newIngred = {
+      key: index,
+      name: '',
+      amount: '',
+      unit: ''
+    }
+
+    ingred.push(newIngred);
+    setAllIngedients(ingred);
+  }
+
+  const addNewPrepStep = () => {
+    const preps = [...allPrepSteps];
+    const index = preps.length;
+
+    const newPrep = {
+      key: index,
+      step: ''
+    }
+
+    preps.push(newPrep);
+    setAllPrepSteps(preps);
   }
 
   const saveNewItem = async () => {
@@ -148,167 +173,161 @@ export default function ModalNewRecipe() {
 
   return (<>
     <ScrollView>
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={headerHeight}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ paddingBottom: 25 }}>
-          <View style={styles.container}>
-            <StyledTextInput
-              value={newRecipe.title}
-              style={styles.input}
-              onChangeText={text => setNewRecipe({ ...newRecipe, title: text })}
-              placeholder="Titel"
-              keyboardType="default"
-              autoComplete='off'
-              clearButtonMode='while-editing'
-              enablesReturnKeyAutomatically={true}
-              autoFocus={true}
-              returnKeyType="next"
-              blurOnSubmit={false}
-            // onSubmitEditing={() => refDuration.current?.focus()}
-            />
-
-            <StyledTextInput
-              value={newRecipe.duration}
-              style={styles.input}
-              onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
-              placeholder="Aufwand | Zeit"
-              keyboardType="default"
-              autoComplete='off'
-              clearButtonMode='while-editing'
-              enablesReturnKeyAutomatically={true}
-              returnKeyType="next"
-              blurOnSubmit={false}
-            // ref={refDuration}
-            // onSubmitEditing={() => refDuration.current?.focus()}
-            />
-
-            <View>
-              <StyledButtonGroup
-                buttons={['Snack', 'Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk']}
-                selectedIndex={selectedIndex}
-                onPress={text => selectCategory(text)}
-              />
-            </View>
-
-
-
-
-          </View>
-
-          <Text style={styles.title}>Zutaten ({newRecipe.ingredients.length})</Text>
-
-
-          {newRecipe.ingredients.map((ingredient, index) => {
-            return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ paddingBottom: 25 }}>
+            <View style={styles.container}>
               <StyledTextInput
-                value={ingredient.name}
+                value={newRecipe.title}
                 style={styles.input}
-                onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], name: text }] })}
-                placeholder="Zutat"
+                onChangeText={text => setNewRecipe({ ...newRecipe, title: text })}
+                placeholder="Titel"
+                keyboardType="default"
+                autoComplete='off'
+                clearButtonMode='while-editing'
+                enablesReturnKeyAutomatically={true}
+                autoFocus={true}
+                returnKeyType="next"
+                blurOnSubmit={false}
+              // onSubmitEditing={() => refDuration.current?.focus()}
+              />
+              <StyledTextInput
+                value={newRecipe.duration}
+                style={styles.input}
+                onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
+                placeholder="Aufwand | Zeit"
                 keyboardType="default"
                 autoComplete='off'
                 clearButtonMode='while-editing'
                 enablesReturnKeyAutomatically={true}
                 returnKeyType="next"
                 blurOnSubmit={false}
+              // ref={refDuration}
               // onSubmitEditing={() => refDuration.current?.focus()}
               />
+              <View>
 
-              <View style={styles.inputBox2}>
-                <View style={styles.input60}>
-                  <StyledTextInput
-                    value={ingredient.amount}
-                    style={styles.input}
-                    onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], amount: text }] })}
-                    placeholder="Menge"
-                    keyboardType="numeric"
-                    autoComplete='off'
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                  // ref={refDuration}
-                  // onSubmitEditing={() => refDuration.current?.focus()}
-                  />
-                </View>
-                <View style={styles.input40}>
-                  <StyledTextInput
-                    value={ingredient.unit}
-                    onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], unit: text }] })}
-                    style={{ ...styles.input, marginLeft: 15 }}
-                    placeholder="Einheit"
-                    keyboardType="default"
-                    autoComplete='off'
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                  // ref={refDuration}
-                  // onSubmitEditing={() => refDuration.current?.focus()}
-                  />
-                </View>
+                <StyledButtonGroup
+                  buttons={['Snack', 'Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk']}
+                  selectedIndex={selectedIndex}
+                  onPress={text => selectCategory(text)}
+                />
               </View>
             </View>
-          })}
-
-          <Pressable
-            onPress={addNewIngredient}
-            style={({ pressed }) => ({
-              backgroundColor: pressed
-                ? Colors[scheme].tintBackground
-                : Colors[scheme].background
-            })}>
-            <View style={styles.itemButton}>
-              <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-              <Text> Zutat hinzufügen</Text>
-            </View>
-          </Pressable>
 
 
-          <Text style={styles.title}>Zubereitung ({newRecipe.ingredients.length})</Text>
+            <Text style={styles.title}>Zutaten ({allIngredients.length})</Text>
+
+            {allIngredients.map((ingredient, index) => {
+              return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                <StyledTextInput
+                  value={ingredient.name}
+                  style={styles.input}
+                  onChangeText={text => editIngredient(text, index, 'name')}
+                  placeholder="Zutat"
+                  keyboardType="default"
+                  autoComplete='off'
+                  clearButtonMode='while-editing'
+                  enablesReturnKeyAutomatically={true}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                // onSubmitEditing={() => refDuration.current?.focus()}
+                />
+                <View style={styles.inputBox2}>
+                  <View style={styles.input60}>
+                    <StyledTextInput
+                      value={ingredient.amount}
+                      style={styles.input}
+                      onChangeText={text => editIngredient(text, index, 'amount')}
+                      placeholder="Menge"
+                      keyboardType="numeric"
+                      autoComplete='off'
+                      clearButtonMode='while-editing'
+                      enablesReturnKeyAutomatically={true}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                    // ref={refDuration}
+                    // onSubmitEditing={() => refDuration.current?.focus()}
+                    />
+                  </View>
+                  <View style={styles.input40}>
+                    <StyledTextInput
+                      value={ingredient.unit}
+                      onChangeText={text => editIngredient(text, index, 'unit')}
+                      style={{ ...styles.input, marginLeft: 15 }}
+                      placeholder="Einheit"
+                      keyboardType="default"
+                      autoComplete='off'
+                      clearButtonMode='while-editing'
+                      enablesReturnKeyAutomatically={true}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                    // ref={refDuration}
+                    // onSubmitEditing={() => refDuration.current?.focus()}
+                    />
+                  </View>
+                </View>
+              </View>
+            })}
+
+            <Pressable
+              onPress={addNewIngredient}
+              style={({ pressed }) => ({
+                backgroundColor: pressed
+                  ? Colors[scheme].tintBackground
+                  : Colors[scheme].background
+              })}>
+              <View style={styles.itemButton}>
+                <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
+                <Text> Zutat hinzufügen</Text>
+              </View>
+            </Pressable>
 
 
-          {newRecipe.ingredients.map((ingredient, index) => {
-            return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
-              <StyledTextInput
-                value={ingredient.name}
-                style={styles.input}
-                onChangeText={text => setNewRecipe({ ...newRecipe, ingredients: [newRecipe.ingredients[index] = { ...newRecipe.ingredients[index], name: text }] })}
-                placeholder="Zubereitungsschritt"
-                keyboardType="default"
-                autoComplete='off'
-                clearButtonMode='while-editing'
-                enablesReturnKeyAutomatically={true}
-                // returnKeyType="next"
-                multiline={true}
-                textAlignVertical="top"
-                numberOfLines={3}
+            <Text style={styles.title}>Zubereitung ({allPrepSteps.length})</Text>
+
+            {allPrepSteps.map((prep, index) => {
+              return <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                <StyledTextInput
+                  value={prep.step}
+                  style={{ ...styles.input, ...styles.inputMultiline }}
+                  onChangeText={text => editPrepSteps(text, index)}
+                  placeholder="Zubereitungsschritt"
+                  keyboardType="default"
+                  autoComplete='off'
+                  clearButtonMode='while-editing'
+                  enablesReturnKeyAutomatically={true}
+                  // returnKeyType="next"
+                  multiline={true}
+                  textAlignVertical="top"
+                  numberOfLines={3}
                 // blurOnSubmit={false}
-              // onSubmitEditing={() => refDuration.current?.focus()}
-              />
-            </View>
-          })}
+                // onSubmitEditing={() => refDuration.current?.focus()}
+                />
+              </View>
+            })}
 
-          <Pressable
-            onPress={addNewPreparationStep}
-            style={({ pressed }) => ({
-              backgroundColor: pressed
-                ? Colors[scheme].tintBackground
-                : Colors[scheme].background
-            })}>
-            <View style={styles.itemButton}>
-              <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-              <Text> Schritt hinzufügen</Text>
-            </View>
-          </Pressable>
+            <Pressable
+              onPress={addNewPrepStep}
+              style={({ pressed }) => ({
+                backgroundColor: pressed
+                  ? Colors[scheme].tintBackground
+                  : Colors[scheme].background
+              })}>
+              <View style={styles.itemButton}>
+                <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
+                <Text> Schritt hinzufügen</Text>
+              </View>
+            </Pressable>
 
 
 
-        </View>
-      </TouchableWithoutFeedback >
+
+          </View>
+        </TouchableWithoutFeedback >
       </KeyboardAvoidingView>
     </ScrollView>
 

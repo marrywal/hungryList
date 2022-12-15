@@ -9,9 +9,15 @@ export interface _ShoppingList {
 }
 
 export interface _Ingredients {
+    key: number,
     name: string,
     amount: string,
     unit: string
+}
+
+export interface _PrepSteps {
+    key: number,
+    step: string
 }
 
 export type _Category = 'Snack' | 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk';
@@ -21,4 +27,5 @@ export interface _Recipe {
     duration: string,
     category: _Category,
     ingredients: _Ingredients[],
+    prepSteps: _PrepSteps[],
 }
