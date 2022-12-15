@@ -11,13 +11,13 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { StyledSwipeable } from '../components/StyledSwipeable';
 
 export default function ModalNewRecipe() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
   const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
     duration: '',
-    category: 'Snack',
+    category: 'Hauptspeise',
     ingredients: [],
     prepSteps: [],
   });
@@ -107,7 +107,7 @@ export default function ModalNewRecipe() {
   const selectCategory = (value: number) => {
     setSelectedIndex(value);
 
-    const categories: _Category[] = ["Snack", "Vorspeise", "Hauptspeise", "Nachspeise", "Getränk"];
+    const categories: _Category[] = ["Vorspeise", "Hauptspeise", "Nachspeise", "Getränk", "Snack"];
     setNewRecipe({ ...newRecipe, category: categories[value] });
   }
 
@@ -160,23 +160,20 @@ export default function ModalNewRecipe() {
   }
 
   const saveNewItem = async () => {
-    // let allItems = [];
+    const recipe = {...newRecipe};
 
-    // try {
-    //   const itemsString = await AsyncStorage.getItem('@shoppingList');
-    //   allItems = itemsString ? JSON.parse(itemsString) : [];
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    if (recipe.title === '') {
+      return;
+    }
 
-    // allItems[0].data.push({
-    //   title: newItem,
-    //   count: ''
-    // });
+    recipe.ingredients = allIngredients;
+    recipe.prepSteps = allPrepSteps;
 
-    // AsyncStorage.setItem('@shoppingList', JSON.stringify(allItems));
+    console.log(recipe);
 
-    // setNewItem('');
+    // AsyncStorage.setItem('@newRecipe', JSON.stringify(recipe));
+
+    // close modal
   }
 
 
@@ -232,7 +229,7 @@ export default function ModalNewRecipe() {
               <View>
 
                 <StyledButtonGroup
-                  buttons={['Snack', 'Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk']}
+                  buttons={['Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk', 'Snack']}
                   selectedIndex={selectedIndex}
                   onPress={text => selectCategory(text)}
                 />
@@ -364,9 +361,10 @@ export default function ModalNewRecipe() {
 
     <View style={styles.inputContainer}>
       <Pressable
+      disabled={newRecipe.title === ''}
         onPress={saveNewItem}
         style={({ pressed }) => ({
-          opacity: pressed ? 0.5 : 1,
+          opacity: pressed || newRecipe.title === '' ? 0.5 : 1,
           width: '100%'
         })}>
         <View style={styles.saveButton}>

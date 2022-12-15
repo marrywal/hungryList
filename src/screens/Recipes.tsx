@@ -9,14 +9,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const DATA = [
   {
-    title: "Snacks",
-    data: [
-      {
-        title: 'Kartoffelchips'
-      },
-    ]
-  },
-  {
     title: "Vorspeisen",
     data: [
       {
@@ -65,7 +57,15 @@ const DATA = [
         title: 'Milchshake'
       },
     ]
-  }
+  },
+  {
+    title: "Snacks",
+    data: [
+      {
+        title: 'Kartoffelchips'
+      },
+    ]
+  },
 ];
 
 export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
@@ -74,6 +74,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   const scheme = useColorScheme();
 
   useEffect(() => {
+    console.log('reload')
     // FAKE DATA
     AsyncStorage.setItem('@recipeList', JSON.stringify(DATA));
     // FAKE DATA

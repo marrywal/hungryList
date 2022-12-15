@@ -20,7 +20,7 @@ export interface _PrepSteps {
     step: string
 }
 
-export type _Category = 'Snack' | 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk';
+export type _Category = 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk' | 'Snack';
 
 export interface _Recipe {
     title: string,
