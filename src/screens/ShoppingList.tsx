@@ -78,9 +78,9 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     },
     sendButton: {
       backgroundColor: Colors[scheme].tint,
-      borderRadius: 10,
-      width: 36,
-      height: 36,
+      borderRadius: 50,
+      width: 34,
+      height: 34,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

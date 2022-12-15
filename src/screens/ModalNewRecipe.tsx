@@ -36,7 +36,8 @@ export default function ModalNewRecipe() {
     inputBox2: {
       display: 'flex',
       justifyContent: 'space-between',
-      flexDirection: 'row'
+      flexDirection: 'row',
+      alignItems: 'center'
     },
     container: {
       paddingTop: 20,
@@ -160,7 +161,7 @@ export default function ModalNewRecipe() {
   }
 
   const saveNewItem = async () => {
-    const recipe = {...newRecipe};
+    const recipe = { ...newRecipe };
 
     if (recipe.title === '') {
       return;
@@ -174,6 +175,7 @@ export default function ModalNewRecipe() {
     // AsyncStorage.setItem('@newRecipe', JSON.stringify(recipe));
 
     // close modal
+    // rezept für wieviele personen
   }
 
 
@@ -212,20 +214,50 @@ export default function ModalNewRecipe() {
                 blurOnSubmit={false}
               // onSubmitEditing={() => refDuration.current?.focus()}
               />
-              <StyledTextInput
-                value={newRecipe.duration}
-                style={styles.input}
-                onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
-                placeholder="Aufwand | Zeit"
-                keyboardType="default"
-                autoComplete='off'
-                clearButtonMode='while-editing'
-                enablesReturnKeyAutomatically={true}
-                returnKeyType="next"
-                blurOnSubmit={false}
-              // ref={refDuration}
-              // onSubmitEditing={() => refDuration.current?.focus()}
-              />
+              <View style={styles.inputBox2}>
+                <View style={{...styles.input60, ...styles.inputBox2}}>
+                  <Pressable
+                    onPress={addNewIngredient}
+                    style={({ pressed }) => ({
+                      backgroundColor: pressed
+                        ? Colors[scheme].tintBackground
+                        : Colors[scheme].background
+                    })}>
+                    <View style={styles.itemButton}>
+                      <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
+                    </View>
+                  </Pressable>
+                  <Text>2</Text>
+                  <MaterialIcons name='people' size={20} color={Colors[scheme].text} />
+                  <Pressable
+                    onPress={addNewIngredient}
+                    style={({ pressed }) => ({
+                      backgroundColor: pressed
+                        ? Colors[scheme].tintBackground
+                        : Colors[scheme].background
+                    })}>
+                    <View style={styles.itemButton}>
+                      <MaterialIcons name='remove-circle' size={20} color={Colors[scheme].tint} />
+                    </View>
+                  </Pressable>
+                </View>
+                <View style={styles.input40}>
+                  <StyledTextInput
+                    value={newRecipe.duration}
+                    style={styles.input}
+                    onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
+                    placeholder="Zeitaufwand"
+                    keyboardType="default"
+                    autoComplete='off'
+                    clearButtonMode='while-editing'
+                    enablesReturnKeyAutomatically={true}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                  // ref={refDuration}
+                  // onSubmitEditing={() => refDuration.current?.focus()}
+                  />
+                </View>
+              </View>
               <View>
 
                 <StyledButtonGroup
@@ -361,7 +393,7 @@ export default function ModalNewRecipe() {
 
     <View style={styles.inputContainer}>
       <Pressable
-      disabled={newRecipe.title === ''}
+        disabled={newRecipe.title === ''}
         onPress={saveNewItem}
         style={({ pressed }) => ({
           opacity: pressed || newRecipe.title === '' ? 0.5 : 1,
