@@ -1,5 +1,4 @@
 const tintColorLight = '#00b3b3';
-// const tintColorLight = '#009B77';
 const tintColorDark = '#006D75';
 
 export const Colors = {
@@ -57,13 +56,3 @@ export const NavigationColors = {
     }
   }
 }
-
-/*
-dark mode:
-- background: #18191a
-- card: #242526
-- hover: #3a3b3c
-- primary text: #e4e6eb
-- secondary text: #b0b3b8
-
-*/

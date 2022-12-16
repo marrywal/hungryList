@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TextInput, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyledButtonGroup, StyledTextInput, Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -111,6 +111,22 @@ export default function ModalNewRecipe() {
     },
   });
 
+  const renderButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>, buttonText?: string, spacingRight = false) => {
+    return <Pressable
+      onPress={onClick}
+      style={({ pressed }) => ({
+        marginRight: spacingRight ? 15 : 0,
+        backgroundColor: pressed
+          ? Colors[scheme].tintBackground
+          : Colors[scheme].background
+      })}>
+      <View style={buttonStyle}>
+        <MaterialIcons name={icon} size={20} color={Colors[scheme].tint} />
+        {buttonText ? <Text> {buttonText}</Text> : null}
+      </View>
+    </Pressable>
+  }
+
   const selectCategory = (value: number) => {
     setSelectedIndex(value);
 
@@ -212,8 +228,7 @@ export default function ModalNewRecipe() {
     <ScrollView>
       <KeyboardAvoidingView
         keyboardVerticalOffset={headerHeight}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
+        behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ paddingBottom: 25 }}>
             <View style={styles.container}>
@@ -222,42 +237,15 @@ export default function ModalNewRecipe() {
                 style={styles.input}
                 onChangeText={text => setNewRecipe({ ...newRecipe, title: text })}
                 placeholder="Titel"
-                keyboardType="default"
-                autoComplete='off'
-                clearButtonMode='while-editing'
-                enablesReturnKeyAutomatically={true}
                 autoFocus={true}
-                returnKeyType="next"
-                blurOnSubmit={false}
               // onSubmitEditing={() => refDuration.current?.focus()}
               />
               <View style={styles.inputBox2}>
                 <View style={{ ...styles.input60, ...styles.inputBox2, marginBottom: 20 }}>
-                  <Pressable
-                    onPress={countPersonDown}
-                    style={({ pressed }) => ({
-                      backgroundColor: pressed
-                        ? Colors[scheme].tintBackground
-                        : Colors[scheme].background
-                    })}>
-                    <View style={styles.itemButton}>
-                      <MaterialIcons name='remove-circle' size={20} color={Colors[scheme].tint} />
-                    </View>
-                  </Pressable>
+                  {renderButton(countPersonDown, 'remove-circle', styles.itemButton)}
                   <Text style={styles.secondaryText}>{personCount}</Text>
                   <MaterialIcons name='people' size={26} color={Colors[scheme].secondaryText} />
-                  <Pressable
-                    onPress={countPersonUp}
-                    style={({ pressed }) => ({
-                      marginRight: 15,
-                      backgroundColor: pressed
-                        ? Colors[scheme].tintBackground
-                        : Colors[scheme].background
-                    })}>
-                    <View style={styles.itemButton}>
-                      <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-                    </View>
-                  </Pressable>
+                  {renderButton(countPersonUp, 'add-circle', styles.itemButton, '', true)}
                 </View>
                 <View style={styles.input40}>
                   <StyledTextInput
@@ -265,19 +253,12 @@ export default function ModalNewRecipe() {
                     style={styles.input}
                     onChangeText={text => setNewRecipe({ ...newRecipe, duration: text })}
                     placeholder="Zeitaufwand"
-                    keyboardType="default"
-                    autoComplete='off'
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
                   // ref={refDuration}
                   // onSubmitEditing={() => refDuration.current?.focus()}
                   />
                 </View>
               </View>
               <View>
-
                 <StyledButtonGroup
                   buttons={['Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk', 'Snack']}
                   selectedIndex={selectedIndex}
@@ -300,12 +281,6 @@ export default function ModalNewRecipe() {
                     style={styles.input}
                     onChangeText={text => editIngredient(text, index, 'name')}
                     placeholder="Zutat"
-                    keyboardType="default"
-                    autoComplete='off'
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
                   // onSubmitEditing={() => refDuration.current?.focus()}
                   />
                   <View style={styles.inputBox2}>
@@ -316,11 +291,6 @@ export default function ModalNewRecipe() {
                         onChangeText={text => editIngredient(text, index, 'amount')}
                         placeholder="Menge"
                         keyboardType="numeric"
-                        autoComplete='off'
-                        clearButtonMode='while-editing'
-                        enablesReturnKeyAutomatically={true}
-                        returnKeyType="next"
-                        blurOnSubmit={false}
                       // ref={refDuration}
                       // onSubmitEditing={() => refDuration.current?.focus()}
                       />
@@ -331,12 +301,6 @@ export default function ModalNewRecipe() {
                         onChangeText={text => editIngredient(text, index, 'unit')}
                         style={{ ...styles.input, marginLeft: 15 }}
                         placeholder="Einheit"
-                        keyboardType="default"
-                        autoComplete='off'
-                        clearButtonMode='while-editing'
-                        enablesReturnKeyAutomatically={true}
-                        returnKeyType="next"
-                        blurOnSubmit={false}
                       // ref={refDuration}
                       // onSubmitEditing={() => refDuration.current?.focus()}
                       />
@@ -346,18 +310,7 @@ export default function ModalNewRecipe() {
               </StyledSwipeable>
             })}
 
-            <Pressable
-              onPress={addNewIngredient}
-              style={({ pressed }) => ({
-                backgroundColor: pressed
-                  ? Colors[scheme].tintBackground
-                  : Colors[scheme].background
-              })}>
-              <View style={styles.itemButton}>
-                <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-                <Text> Zutat hinzufügen</Text>
-              </View>
-            </Pressable>
+            {renderButton(addNewIngredient, 'add-circle', styles.itemButton, 'Zutat hinzufügen')}
 
 
             <Text style={styles.title}>Zubereitung ({allPrepSteps.length})</Text>
@@ -373,10 +326,6 @@ export default function ModalNewRecipe() {
                     style={{ ...styles.input, ...styles.inputMultiline }}
                     onChangeText={text => editPrepSteps(text, index)}
                     placeholder="Zubereitungsschritt"
-                    keyboardType="default"
-                    autoComplete='off'
-                    clearButtonMode='while-editing'
-                    enablesReturnKeyAutomatically={true}
                     // returnKeyType="next"
                     multiline={true}
                     textAlignVertical="top"
@@ -388,18 +337,8 @@ export default function ModalNewRecipe() {
               </StyledSwipeable>
             })}
 
-            <Pressable
-              onPress={addNewPrepStep}
-              style={({ pressed }) => ({
-                backgroundColor: pressed
-                  ? Colors[scheme].tintBackground
-                  : Colors[scheme].background
-              })}>
-              <View style={styles.itemButton}>
-                <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-                <Text> Schritt hinzufügen</Text>
-              </View>
-            </Pressable>
+            {renderButton(addNewPrepStep, 'add-circle', styles.itemButton, 'Schritt hinzufügen')}
+
 
 
 

@@ -122,18 +122,10 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
 
     setNewItem('');
 
-
-
-
     // listRef.current?.scrollToLocation({ animated: true,
     //   itemIndex: 1,
     //   sectionIndex: 0,
     //   viewPosition: 1 })
-
-
-
-
-
 
     //listRef.current.scrollToEnd({ animating: true });
 
@@ -184,11 +176,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
             style={styles.sendInput}
             onChangeText={text => setNewItem(text)}
             placeholder="Was brauchst du?"
-            keyboardType="default"
-            autoComplete='off'
-            clearButtonMode='while-editing'
-            enablesReturnKeyAutomatically={true}
-            blurOnSubmit={false}
+            returnKeyType="default"
             onSubmitEditing={saveNewItem}
           />
           <Pressable

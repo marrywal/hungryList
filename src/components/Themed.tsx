@@ -60,6 +60,12 @@ export const StyledTextInput = React.forwardRef((props: TextInputProps, ref: Rea
 
   return <TextInput 
   placeholderTextColor={Colors[scheme].placeholder}
+  keyboardType="default"
+  autoComplete='off'
+  clearButtonMode='while-editing'
+  enablesReturnKeyAutomatically={true}
+  blurOnSubmit={false}
+  returnKeyType="next"
   ref={ref} 
   style={[{ ...themedStyle }, style]} 
   {...otherProps} />;
