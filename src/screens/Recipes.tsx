@@ -74,7 +74,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   const scheme = useColorScheme();
 
   useEffect(() => {
-    console.log('reload')
     // FAKE DATA
     AsyncStorage.setItem('@recipeList', JSON.stringify(DATA));
     // FAKE DATA
@@ -158,7 +157,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
             />
             <View>
               <Text style={styles.title}>{itemTitle}</Text>
-              <Text style={styles.subtitle}>25min | leicht</Text>
+              <Text style={styles.subtitle}>25min</Text>
             </View>
           </View>
           <MaterialIcons

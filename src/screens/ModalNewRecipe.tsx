@@ -14,6 +14,7 @@ export default function ModalNewRecipe() {
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
   const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
+  const [personCount, setPersonCount] = useState<number>(2);
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
     duration: '',
@@ -53,6 +54,11 @@ export default function ModalNewRecipe() {
       marginHorizontal: 10,
       marginBottom: 5,
       marginTop: 20
+    },
+    secondaryText: {
+      color: Colors[scheme].secondaryText,
+      width: 18,
+      textAlign: 'right'
     },
     separator: {
       height: 1,
@@ -191,6 +197,17 @@ export default function ModalNewRecipe() {
     setAllPrepSteps(preps);
   };
 
+  const countPersonUp = () => {
+    setPersonCount(personCount + 1);
+  }
+
+  const countPersonDown = () => {
+    if (personCount === 1) {
+      return;
+    }
+    setPersonCount(personCount - 1);
+  }
+
   return (<>
     <ScrollView>
       <KeyboardAvoidingView
@@ -215,22 +232,9 @@ export default function ModalNewRecipe() {
               // onSubmitEditing={() => refDuration.current?.focus()}
               />
               <View style={styles.inputBox2}>
-                <View style={{...styles.input60, ...styles.inputBox2}}>
+                <View style={{ ...styles.input60, ...styles.inputBox2, marginBottom: 20 }}>
                   <Pressable
-                    onPress={addNewIngredient}
-                    style={({ pressed }) => ({
-                      backgroundColor: pressed
-                        ? Colors[scheme].tintBackground
-                        : Colors[scheme].background
-                    })}>
-                    <View style={styles.itemButton}>
-                      <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
-                    </View>
-                  </Pressable>
-                  <Text>2</Text>
-                  <MaterialIcons name='people' size={20} color={Colors[scheme].text} />
-                  <Pressable
-                    onPress={addNewIngredient}
+                    onPress={countPersonDown}
                     style={({ pressed }) => ({
                       backgroundColor: pressed
                         ? Colors[scheme].tintBackground
@@ -238,6 +242,20 @@ export default function ModalNewRecipe() {
                     })}>
                     <View style={styles.itemButton}>
                       <MaterialIcons name='remove-circle' size={20} color={Colors[scheme].tint} />
+                    </View>
+                  </Pressable>
+                  <Text style={styles.secondaryText}>{personCount}</Text>
+                  <MaterialIcons name='people' size={26} color={Colors[scheme].secondaryText} />
+                  <Pressable
+                    onPress={countPersonUp}
+                    style={({ pressed }) => ({
+                      marginRight: 15,
+                      backgroundColor: pressed
+                        ? Colors[scheme].tintBackground
+                        : Colors[scheme].background
+                    })}>
+                    <View style={styles.itemButton}>
+                      <MaterialIcons name='add-circle' size={20} color={Colors[scheme].tint} />
                     </View>
                   </Pressable>
                 </View>
