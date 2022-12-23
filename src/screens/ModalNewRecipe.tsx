@@ -197,7 +197,6 @@ export default function ModalNewRecipe() {
     // AsyncStorage.setItem('@newRecipe', JSON.stringify(recipe));
 
     // close modal
-    // rezept für wieviele personen
   }
 
 

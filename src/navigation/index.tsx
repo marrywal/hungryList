@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable, Route, View, Text } from 'react-native';
+import { ColorSchemeName, Pressable } from 'react-native';
 
 import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';

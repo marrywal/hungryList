@@ -40,6 +40,16 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       flex: 1,
       paddingTop: StatusBar.currentHeight,
     },
+    emptyScreen: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%'
+    },
+    emptyScreenText: {
+      color: Colors[scheme].placeholder,
+      fontSize: 16
+    },
     item: {
       paddingVertical: 10,
       paddingHorizontal: 20,
@@ -152,7 +162,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
 
   return (<>
     <SafeAreaView style={styles.container}>
-      <SectionList
+      {listItems[0]?.data.length > 0 ? <SectionList
         renderItem={({ item }) =>
           <Item item={item} />}
         sections={listItems}
@@ -162,7 +172,17 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       //  <Text style={styles.header}>{title}</Text>
       // )}
       // stickySectionHeadersEnabled={false}
-      />
+      /> :
+        <View style={styles.emptyScreen}>
+          <MaterialIcons
+            name="shopping-cart"
+            size={120}
+            color={Colors[scheme].border}
+          />
+          <Text style={styles.emptyScreenText}>
+            Deine Einkaufsliste ist leer
+          </Text>
+        </View>}
     </SafeAreaView>
 
     <KeyboardAvoidingView
