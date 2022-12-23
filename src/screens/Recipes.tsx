@@ -73,6 +73,13 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   const [retrieve, setRetrieve] = useState(true);
   const scheme = useColorScheme();
 
+  /* TODO:
+  - spashscreen
+  - loadingscreen?
+  - createContext
+  - https://github.com/Shopify/restyle
+  */
+
   useEffect(() => {
     // FAKE DATA
     // AsyncStorage.removeItem('@recipeList');
