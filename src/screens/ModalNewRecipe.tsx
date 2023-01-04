@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TextInput, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyledButtonGroup, StyledTextInput, Text, View } from '../components/Themed';
@@ -9,8 +9,9 @@ import React from 'react';
 import { _Category, _Ingredients, _PrepSteps, _Recipe, _RecipeList } from '../constants/interfaces';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { StyledSwipeable } from '../components/StyledSwipeable';
+import { useNavigation } from '@react-navigation/native'
 
-export default function ModalNewRecipe({ navigation }: {navigation: any}) {
+export default function ModalNewRecipe({ navigation }: { navigation: any }) {
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
   const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
@@ -24,8 +25,36 @@ export default function ModalNewRecipe({ navigation }: {navigation: any}) {
   });
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
+  const nav = useNavigation();
 
   // const refDuration = React.useRef<TextInput | null>(null);
+
+  useEffect(() => {
+    nav.setOptions({
+      headerRight: () => <Pressable
+        onPress={saveNewItem}
+        style={({ pressed }) => ({
+          opacity: pressed || newRecipe.title === '' ? 0.5 : 1,
+        })}>
+        <MaterialIcons
+          name="check"
+          size={32}
+          color={Colors[scheme].textOnTint}
+        />
+      </Pressable>,
+      headerLeft: () => <Pressable
+      onPress={() => navigation.navigate('Recipes')}
+      style={({ pressed }) => ({
+        opacity: pressed ? 0.5 : 1,
+      })}>
+      <MaterialIcons
+        name="close"
+        size={32}
+        color={Colors[scheme].textOnTint}
+      />
+    </Pressable>,
+    });
+  });
 
   const styles = StyleSheet.create({
     input60: {
@@ -204,6 +233,7 @@ export default function ModalNewRecipe({ navigation }: {navigation: any}) {
     AsyncStorage.setItem('@recipeList', JSON.stringify(allItems));
 
     navigation.navigate('Recipes');
+
   }
 
 

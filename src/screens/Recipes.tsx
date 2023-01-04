@@ -42,6 +42,8 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   - loadingscreen?
   - createContext
   - https://github.com/Shopify/restyle
+  - new recipe: mark as favorite (wird als erstes angezeigt)
+  - new recipe: save picture?
   */
 
   useEffect(() => {

@@ -86,20 +86,7 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe}
           options={({ navigation }) => ({
-            title: 'Neues Rezept',
-            headerRight: () => (
-              <Pressable
-                onPress={() => navigation.navigate('Recipes')}
-                style={({ pressed }) => ({
-                  opacity: pressed ? 0.5 : 1,
-                })}>
-                <MaterialIcons
-                  name="check"
-                  size={32}
-                  color={Colors[colorScheme].textOnTint}
-                />
-              </Pressable>
-            ),
+            title: 'Neues Rezept'
           })}
         />
       </Stack.Group>
