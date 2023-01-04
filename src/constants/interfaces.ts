@@ -21,6 +21,7 @@ export interface _PrepSteps {
 }
 
 export type _Category = 'Vorspeise' | 'Hauptspeise' | 'Nachspeise' | 'Getränk' | 'Snack';
+export type _CategoryNames = 'Vorspeisen' | 'Hauptspeisen' | 'Nachspeisen' | 'Getränke' | 'Snacks';
 
 export interface _Recipe {
     title: string,
@@ -28,4 +29,9 @@ export interface _Recipe {
     category: _Category,
     ingredients: _Ingredients[],
     prepSteps: _PrepSteps[],
+}
+
+export interface _RecipeList {
+    categoryName: _CategoryNames,
+    data: _Recipe[]
 }

@@ -6,70 +6,34 @@ import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { _RecipeList } from '../constants/interfaces';
 
-const DATA = [
+const DEFAULTDATA = [
   {
-    title: "Vorspeisen",
+    categoryName: "Vorspeisen",
+    data: []
+  },
+  {
+    categoryName: "Hauptspeisen",
     data: [
-      {
-        title: 'Gemüsesuppe'
-      },
-      {
-        title: 'Nudeln'
-      },
-      {
-        title: 'Reis mit Gemüse'
-      },
     ]
   },
   {
-    title: "Hauptspeisen",
-    data: [
-      {
-        title: 'Knödel'
-      },
-      {
-        title: 'Kartoffeln'
-      },
-    ]
+    categoryName: "Nachspeisen",
+    data: []
   },
   {
-    title: "Nachspeisen",
-    data: [
-      {
-        title: 'Eis'
-      },
-      {
-        title: 'Heiße Himbeeren'
-      },
-      {
-        title: 'Kuchen'
-      },
-    ]
+    categoryName: "Getränke",
+    data: []
   },
   {
-    title: "Getränke",
-    data: [
-      {
-        title: 'Tee'
-      },
-      {
-        title: 'Milchshake'
-      },
-    ]
-  },
-  {
-    title: "Snacks",
-    data: [
-      {
-        title: 'Kartoffelchips'
-      },
-    ]
+    categoryName: "Snacks",
+    data: []
   },
 ];
 
 export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
-  const [recipeListItems, setRecipeListItems] = useState<any>([]);
+  const [recipeListItems, setRecipeListItems] = useState<_RecipeList[]>([]);
   const [retrieve, setRetrieve] = useState(true);
   const scheme = useColorScheme();
 
@@ -81,26 +45,31 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   */
 
   useEffect(() => {
-    // FAKE DATA
     // AsyncStorage.removeItem('@recipeList');
-    AsyncStorage.setItem('@recipeList', JSON.stringify(DATA));
-    // FAKE DATA
+    const unsubscribe = navigation.addListener('focus', () => {
+      const retrieveData = async () => {
+        try {
+          let itemsString = await AsyncStorage.getItem('@recipeList');
+          if (!itemsString) {
+            AsyncStorage.setItem('@recipeList', JSON.stringify(DEFAULTDATA));
+            itemsString = await AsyncStorage.getItem('@recipeList');
+          }
+          const allItems = itemsString ? JSON.parse(itemsString) : [];
+          setRecipeListItems(allItems);
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    const retrieveData = async () => {
-      try {
-        const itemsString = await AsyncStorage.getItem('@recipeList');
-        const allItems = itemsString ? JSON.parse(itemsString) : [];
-        setRecipeListItems(allItems);
-      } catch (error) {
-        console.log(error);
+      if (retrieve) {
+        retrieveData();
+        setRetrieve(false);
       }
-    };
+    });
 
-    if (retrieve) {
-      retrieveData();
-      setRetrieve(false);
-    }
-  }, [retrieve]);
+    return unsubscribe;
+
+  }, [navigation]);
 
   const styles = StyleSheet.create({
     container: {
@@ -203,7 +172,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
             />
             <View>
               <Text style={styles.title}>{itemTitle}</Text>
-              <Text style={styles.subtitle}>25min</Text>
+              <Text style={styles.subtitle}>{item.duration}</Text>
             </View>
           </View>
           <MaterialIcons
@@ -248,10 +217,13 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
           renderItem={({ item }) =>
             <Item item={item} />}
           sections={recipeListItems}
-          keyExtractor={(item, index) => item + index}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text style={styles.header}>{title}</Text>
-          )}
+          keyExtractor={(item, index) => item.category + index}
+          renderSectionHeader={({ section: { categoryName, data } }) => {
+            if (data.length > 0) {
+              return <Text style={styles.header}>{categoryName} ({data.length})</Text>
+            }
+            return null;
+          }}
           stickySectionHeadersEnabled={false}
         />
       }

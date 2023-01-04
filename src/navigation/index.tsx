@@ -61,26 +61,28 @@ function RootNavigator() {
         },
         headerTintColor: Colors[colorScheme].textOnTint,
       }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={({ route, navigation }) => ({
-        title: getHeaderTitle(route),
-        headerRight: () => {
-          return <Pressable
-            onPress={() => navigation.navigate('ModalNewRecipe')}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.5 : 1,
-              width: 36,
-              height: 36
-            })}>
-            {getHeaderTitle(route) === 'Meine Rezepte'
-              ? <MaterialIcons
-                name="add"
-                size={36}
-                color={Colors[colorScheme].textOnTint} />
-              : <></>}
-          </Pressable>
-        }
-      })} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Group>
+        <Stack.Screen name="Root" component={BottomTabNavigator} options={({ route, navigation }) => ({
+          title: getHeaderTitle(route),
+          headerRight: () => {
+            return <Pressable
+              onPress={() => navigation.navigate('ModalNewRecipe')}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+                width: 36,
+                height: 36
+              })}>
+              {getHeaderTitle(route) === 'Meine Rezepte'
+                ? <MaterialIcons
+                  name="add"
+                  size={36}
+                  color={Colors[colorScheme].textOnTint} />
+                : <></>}
+            </Pressable>
+          }
+        })} />
+        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe}
           options={({ navigation }) => ({

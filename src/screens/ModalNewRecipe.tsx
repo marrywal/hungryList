@@ -6,11 +6,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import React from 'react';
-import { _Category, _Ingredients, _PrepSteps, _Recipe } from '../constants/interfaces';
+import { _Category, _Ingredients, _PrepSteps, _Recipe, _RecipeList } from '../constants/interfaces';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { StyledSwipeable } from '../components/StyledSwipeable';
 
-export default function ModalNewRecipe() {
+export default function ModalNewRecipe({ navigation }: {navigation: any}) {
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
   const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
@@ -192,11 +192,18 @@ export default function ModalNewRecipe() {
     recipe.ingredients = allIngredients;
     recipe.prepSteps = allPrepSteps;
 
-    console.log(recipe);
+    const itemsString = await AsyncStorage.getItem('@recipeList');
+    const allItems = itemsString ? JSON.parse(itemsString) : [];
 
-    // AsyncStorage.setItem('@newRecipe', JSON.stringify(recipe));
+    allItems.forEach((list: _RecipeList) => {
+      if (list.categoryName.includes(newRecipe.category)) {
+        list.data.push(recipe)
+      }
+    });
 
-    // close modal
+    AsyncStorage.setItem('@recipeList', JSON.stringify(allItems));
+
+    navigation.navigate('Recipes');
   }
 
 

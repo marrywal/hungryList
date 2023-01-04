@@ -173,16 +173,18 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       // )}
       // stickySectionHeadersEnabled={false}
       /> :
-        <View style={styles.emptyScreen}>
-          <MaterialIcons
-            name="shopping-cart"
-            size={120}
-            color={Colors[scheme].border}
-          />
-          <Text style={styles.emptyScreenText}>
-            Deine Einkaufsliste ist leer
-          </Text>
-        </View>}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.emptyScreen}>
+            <MaterialIcons
+              name="shopping-cart"
+              size={120}
+              color={Colors[scheme].border}
+            />
+            <Text style={styles.emptyScreenText}>
+              Deine Einkaufsliste ist leer
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>}
     </SafeAreaView>
 
     <KeyboardAvoidingView
