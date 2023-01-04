@@ -6,18 +6,19 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import React from 'react';
-import { _Category, _Ingredients, _PrepSteps, _Recipe, _RecipeList } from '../constants/interfaces';
+import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../constants/interfaces';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { StyledSwipeable } from '../components/StyledSwipeable';
 import { useNavigation } from '@react-navigation/native'
 
 export default function ModalNewRecipe({ navigation }: { navigation: any }) {
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [allIngredients, setAllIngedients] = useState<_Ingredients[]>([]);
-  const [allPrepSteps, setAllPrepSteps] = useState<_PrepSteps[]>([]);
+  const [allIngredients, setAllIngedients] = useState<_Ingredient[]>([]);
+  const [allPrepSteps, setAllPrepSteps] = useState<_PrepStep[]>([]);
   const [personCount, setPersonCount] = useState<number>(2);
   const [newRecipe, setNewRecipe] = useState<_Recipe>({
     title: '',
+    personCount: 0,
     duration: '',
     category: 'Hauptspeise',
     ingredients: [],
@@ -218,6 +219,9 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
       return;
     }
 
+    const title = newRecipe.title.charAt(0).toUpperCase() + newRecipe.title.slice(1);
+    recipe.title = title;
+    recipe.personCount = personCount;
     recipe.ingredients = allIngredients;
     recipe.prepSteps = allPrepSteps;
 

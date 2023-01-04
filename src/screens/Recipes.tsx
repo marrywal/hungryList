@@ -101,6 +101,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       backgroundColor: 'transparent'
     },
     itemContent: {
+      flex: 1,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -112,6 +113,9 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       marginHorizontal: 10,
       marginBottom: 5,
       marginTop: 20
+    },
+    titleBox: {
+      flex: 1,
     },
     title: {
       fontSize: 18,
@@ -140,7 +144,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   });
 
   const onItemClick = (item: any) => {
-    console.log(item)
+    navigation.navigate('ModalDetailRecipe', item);
   }
 
   const isListEmpty = () => {
@@ -155,8 +159,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   }
 
   const Item = ({ item }: { item: any }) => {
-    const itemTitle = item.title.charAt(0).toUpperCase() + item.title.slice(1);
-
     return (
       <Pressable
         onPress={() => onItemClick(item)}
@@ -172,8 +174,8 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
               size={80}
               color={Colors[scheme].border}
             />
-            <View>
-              <Text style={styles.title}>{itemTitle}</Text>
+            <View style={styles.titleBox}>
+              <Text numberOfLines={1} style={styles.title}>{item.title}</Text>
               <Text style={styles.subtitle}>{item.duration}</Text>
             </View>
           </View>

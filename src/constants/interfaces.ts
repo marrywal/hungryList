@@ -8,14 +8,14 @@ export interface _ShoppingList {
     data: _ShoppingItem[];
 }
 
-export interface _Ingredients {
+export interface _Ingredient {
     key: number,
     name: string,
     amount: string,
     unit: string
 }
 
-export interface _PrepSteps {
+export interface _PrepStep {
     key: number,
     step: string
 }
@@ -25,10 +25,11 @@ export type _CategoryNames = 'Vorspeisen' | 'Hauptspeisen' | 'Nachspeisen' | 'Ge
 
 export interface _Recipe {
     title: string,
+    personCount: number,
     duration: string,
     category: _Category,
-    ingredients: _Ingredients[],
-    prepSteps: _PrepSteps[],
+    ingredients: _Ingredient[],
+    prepSteps: _PrepStep[],
 }
 
 export interface _RecipeList {

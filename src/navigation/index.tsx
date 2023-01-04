@@ -19,6 +19,7 @@ import Settings from '../screens/Settings';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import ModalNewRecipe from '../screens/ModalNewRecipe';
+import ModalDetailRecipe from '../screens/ModalDetailRecipe';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -87,6 +88,13 @@ function RootNavigator() {
         <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe}
           options={({ navigation }) => ({
             title: 'Neues Rezept'
+          })}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: 'card' }}>
+        <Stack.Screen name="ModalDetailRecipe" component={ModalDetailRecipe}
+          options={({ navigation, route }) => ({
+            headerBackTitle: ''
           })}
         />
       </Stack.Group>
