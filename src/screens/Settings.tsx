@@ -29,3 +29,16 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+
+/* TODO: 
+mögliche optionen: 
+- rezept-kategorien aus/einblenden 
+- rezept-kategorien reihenfolge ändern
+- dark-light mode switch
+- bilder aus/einblenden 
+- favoriten funktion aus/einblenden 
+- größere schrift für kochen (rezept) ein/ausschalten 
+
+
+*/

@@ -132,7 +132,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
 
     setNewItem('');
 
-    // listRef.current?.scrollToLocation({ animated: true,
+    // TODO: listRef.current?.scrollToLocation({ animated: true, 
     //   itemIndex: 1,
     //   sectionIndex: 0,
     //   viewPosition: 1 })

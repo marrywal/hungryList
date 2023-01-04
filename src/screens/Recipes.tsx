@@ -121,6 +121,12 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       fontSize: 18,
     },
     subtitle: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 3,
+    },
+    subtitleText: {
       fontSize: 14,
       color: Colors[scheme].secondaryText,
     },
@@ -175,8 +181,18 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
               color={Colors[scheme].border}
             />
             <View style={styles.titleBox}>
-              <Text numberOfLines={1} style={styles.title}>{item.title}</Text>
-              <Text style={styles.subtitle}>{item.duration}</Text>
+              <Text numberOfLines={1} style={styles.title}>
+                {item.title}
+              </Text>
+              <View style={styles.subtitle}>
+                {item.isFavorite ? <MaterialIcons
+                  name='star'
+                  size={16}
+                  color={Colors[scheme].warning}
+                  style={{ marginRight: 4 }}
+                /> : <></>}
+                <Text style={styles.subtitleText}>{item.duration}</Text>
+              </View>
             </View>
           </View>
           <MaterialIcons

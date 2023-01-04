@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TextInput, TouchableWithoutFeedback, ViewStyle } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyledButtonGroup, StyledTextInput, Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -23,12 +23,13 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     category: 'Hauptspeise',
     ingredients: [],
     prepSteps: [],
+    isFavorite: false
   });
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
   const nav = useNavigation();
 
-  // const refDuration = React.useRef<TextInput | null>(null);
+  // TODO: const refDuration = React.useRef<TextInput | null>(null);
 
   useEffect(() => {
     nav.setOptions({

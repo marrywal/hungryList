@@ -30,6 +30,7 @@ export interface _Recipe {
     category: _Category,
     ingredients: _Ingredient[],
     prepSteps: _PrepStep[],
+    isFavorite: boolean,
 }
 
 export interface _RecipeList {
