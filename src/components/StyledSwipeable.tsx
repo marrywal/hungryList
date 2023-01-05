@@ -1,10 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { SwipeableProps } from 'react-native-gesture-handler/lib/typescript/components/Swipeable';
 import { Colors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import { View } from '../components/Themed';
 
 interface Props extends SwipeableProps {
   deleteRow?: () => void

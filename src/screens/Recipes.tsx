@@ -7,6 +7,8 @@ import { Colors } from "../constants/Colors";
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { _RecipeList } from '../constants/interfaces';
+import { StyledHeader } from '../components/StyledHeader';
+import { StyledButtonPressable } from '../components/StyledButtonPressable';
 
 const DEFAULTDATA = [
   {
@@ -86,7 +88,8 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
     },
     emptyScreenText: {
       color: Colors[scheme].placeholder,
-      fontSize: 16
+      fontSize: 16,
+      marginBottom: 15,
     },
     item: {
       paddingVertical: 0,
@@ -108,12 +111,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       justifyContent: 'space-between',
       backgroundColor: 'transparent'
     },
-    header: {
-      fontSize: 12,
-      marginHorizontal: 10,
-      marginBottom: 5,
-      marginTop: 20
-    },
     titleBox: {
       flex: 1,
     },
@@ -129,23 +126,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
     subtitleText: {
       fontSize: 14,
       color: Colors[scheme].secondaryText,
-    },
-    saveButton: {
-      backgroundColor: Colors[scheme].tint,
-      borderRadius: 10,
-      height: 45,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 15,
-      paddingHorizontal: 25,
-    },
-    saveButtonText: {
-      color: Colors[scheme].textOnTint,
-      fontSize: 16,
-      marginLeft: 5,
-      fontWeight: 'bold',
     },
   });
 
@@ -217,20 +197,13 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
           <Text style={styles.emptyScreenText}>
             Noch keine Rezepte gespeichert
           </Text>
-          <Pressable
+          <StyledButtonPressable
             onPress={() => navigation.navigate('ModalNewRecipe')}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.5 : 1
-            })}>
-            <View style={styles.saveButton}>
-              <MaterialIcons
-                name="add"
-                size={26}
-                color={Colors[scheme].textOnTint}
-              />
-              <Text style={styles.saveButtonText}>Neues Rezept</Text>
-            </View>
-          </Pressable>
+            text='Neues Rezept'
+            icon='add'
+            color='default'
+            customWidth={true}
+          />
         </View>
         :
         <SectionList
@@ -240,7 +213,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
           keyExtractor={(item, index) => item.category + index}
           renderSectionHeader={({ section: { categoryName, data } }) => {
             if (data.length > 0) {
-              return <Text style={styles.header}>{categoryName} ({data.length})</Text>
+              return <StyledHeader text={categoryName} count={data.length} />
             }
             return null;
           }}

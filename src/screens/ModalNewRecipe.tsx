@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyledButtonGroup, StyledTextInput, Text, View } from '../components/Themed';
+import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
@@ -10,6 +10,10 @@ import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../cons
 import { useHeaderHeight } from '@react-navigation/elements';
 import { StyledSwipeable } from '../components/StyledSwipeable';
 import { useNavigation } from '@react-navigation/native'
+import { StyledButtonGroup } from '../components/StyledButtonGroup';
+import { StyledTextInput } from '../components/StyledTextInput';
+import { StyledButtonPressable } from '../components/StyledButtonPressable';
+import { StyledHeader } from '../components/StyledHeader';
 
 export default function ModalNewRecipe({ navigation }: { navigation: any }) {
   const [selectedIndex, setSelectedIndex] = useState(1);
@@ -45,16 +49,16 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
         />
       </Pressable>,
       headerLeft: () => <Pressable
-      onPress={() => navigation.navigate('Recipes')}
-      style={({ pressed }) => ({
-        opacity: pressed ? 0.5 : 1,
-      })}>
-      <MaterialIcons
-        name="close"
-        size={32}
-        color={Colors[scheme].textOnTint}
-      />
-    </Pressable>,
+        onPress={() => navigation.navigate('Recipes')}
+        style={({ pressed }) => ({
+          opacity: pressed ? 0.5 : 1,
+        })}>
+        <MaterialIcons
+          name="close"
+          size={32}
+          color={Colors[scheme].textOnTint}
+        />
+      </Pressable>,
     });
   });
 
@@ -79,12 +83,6 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     containerSeparator: {
       borderBottomColor: Colors[scheme].input,
       borderBottomWidth: 1
-    },
-    title: {
-      fontSize: 12,
-      marginHorizontal: 10,
-      marginBottom: 5,
-      marginTop: 20
     },
     secondaryText: {
       color: Colors[scheme].secondaryText,
@@ -112,24 +110,6 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
       maxHeight: 90,
       paddingTop: 9,
       color: Colors[scheme].text
-    },
-    saveButton: {
-      backgroundColor: Colors[scheme].tint,
-      borderRadius: 10,
-      height: 45,
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 35,
-      paddingHorizontal: 25,
-    },
-    saveButtonText: {
-      color: Colors[scheme].textOnTint,
-      fontSize: 16,
-      marginLeft: 5,
-      fontWeight: 'bold',
     },
     inputContainer: {
       paddingVertical: 10,
@@ -308,8 +288,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
               </View>
             </View>
 
-
-            <Text style={styles.title}>Zutaten ({allIngredients.length})</Text>
+            <StyledHeader text='Zutaten' count={allIngredients.length} />
 
             {allIngredients.map((ingredient, index) => {
               return <StyledSwipeable
@@ -353,8 +332,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
 
             {renderButton(addNewIngredient, 'add-circle', styles.itemButton, 'Zutat hinzufügen')}
 
-
-            <Text style={styles.title}>Zubereitung ({allPrepSteps.length})</Text>
+            <StyledHeader text='Zubereitung' count={allPrepSteps.length} />
 
             {allPrepSteps.map((prep, index) => {
               return <StyledSwipeable
@@ -380,32 +358,19 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
 
             {renderButton(addNewPrepStep, 'add-circle', styles.itemButton, 'Schritt hinzufügen')}
 
-
-
-
-
           </View>
         </TouchableWithoutFeedback >
       </KeyboardAvoidingView>
     </ScrollView>
 
     <View style={styles.inputContainer}>
-      <Pressable
-        disabled={newRecipe.title === ''}
+      <StyledButtonPressable
+        disabledButton={newRecipe.title === ''}
         onPress={saveNewItem}
-        style={({ pressed }) => ({
-          opacity: pressed || newRecipe.title === '' ? 0.5 : 1,
-          width: '100%'
-        })}>
-        <View style={styles.saveButton}>
-          <MaterialIcons
-            name="check"
-            size={26}
-            color={Colors[scheme].textOnTint}
-          />
-          <Text style={styles.saveButtonText}>Speichern</Text>
-        </View>
-      </Pressable>
+        text='Speichern'
+        icon='check'
+        color='default'
+      />
     </View>
   </>
   );

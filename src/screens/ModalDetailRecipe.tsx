@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../constants/interfaces';
 import { useNavigation } from '@react-navigation/native'
 import { Tooltip } from '@rneui/themed';
+import { StyledButtonPressable } from '../components/StyledButtonPressable';
+import { StyledHeader } from '../components/StyledHeader';
 
 export default function ModalDetailRecipe({ navigation, route }: { navigation: any, route: any }) {
     const recipe: _Recipe = route.params;
@@ -71,41 +73,6 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         containerButtons: {
             paddingTop: 20,
             paddingHorizontal: 15,
-        },
-        title: {
-            fontSize: 12,
-            marginHorizontal: 10,
-            marginBottom: 5,
-            marginTop: 20
-        },
-        button: {
-            borderRadius: 10,
-            height: 45,
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingHorizontal: 25,
-            marginTop: 10,
-        },
-        editButton: {
-            backgroundColor: Colors[scheme].tint,
-        },
-        deleteButton: {
-            marginBottom: 35,
-        },
-        buttonText: {
-            fontSize: 16,
-            marginLeft: 5,
-            fontWeight: 'bold',
-        },
-        editButtonText: {
-            color: Colors[scheme].textOnTint,
-        },
-        deleteButtonText: {
-            color: Colors[scheme].error,
-            fontSize: 14,
         },
         box: {
             display: 'flex',
@@ -216,11 +183,25 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     const PrepStep = ({ content }: { content: _PrepStep }) => {
         return (<View style={styles.box}>
             <Text style={styles.prepStepsCount}>{content.key}. </Text>
-            <Text style={styles.prepStepsContent}>{content.step}</Text>
+            <Text style={styles.prepStepsContent}>{content.step}
+
+                {/* <Tooltip key={content.key}
+                    backgroundColor={Colors[scheme].text}
+                    visible={open}
+                    onOpen={() => {
+                        setOpen(true);
+                    }}
+                    onClose={() => {
+                        setOpen(false);
+                    }}
+                    popover={<Text style={{ color: Colors[scheme].textOnTint }}>600 ml</Text>}
+                ><Text style={{fontSize: 18, textDecorationLine: 'underline'}}>Milch</Text></Tooltip> */}
+
+            </Text>
         </View>)
     };
 
-    const renderButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>, buttonText?: string, spacingRight = false) => {
+    const renderCounterButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>, buttonText?: string, spacingRight = false) => {
         return <Pressable
             onPress={onClick}
             style={({ pressed }) => ({
@@ -267,33 +248,23 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                             <Text>Rezept für {personCount} Personen</Text>
                         </View>
                         <View style={{ ...styles.input40, ...styles.inputBox2, marginBottom: 20 }}>
-                            {renderButton(countPersonDown, 'remove-circle', styles.itemButton)}
+                            {renderCounterButton(countPersonDown, 'remove-circle', styles.itemButton)}
                             <Text style={styles.secondaryText}>{personCount}</Text>
                             <MaterialIcons name='people' size={26} color={Colors[scheme].secondaryText} />
-                            {renderButton(countPersonUp, 'add-circle', styles.itemButton, '', true)}
+                            {renderCounterButton(countPersonUp, 'add-circle', styles.itemButton, '', true)}
                         </View>
                     </View>
-                    <Pressable
+                    <StyledButtonPressable
                         onPress={addIngredientsToShoppingList}
-                        style={({ pressed }) => ({
-                            opacity: pressed ? 0.5 : 1,
-                            width: '100%'
-                        })}>
-                        <View style={{ ...styles.button, ...styles.editButton }}>
-                            <MaterialIcons
-                                name="shopping-cart"
-                                size={26}
-                                color={Colors[scheme].textOnTint}
-                            />
-                            <Text style={{ ...styles.buttonText, ...styles.editButtonText }}>Zu Einkaufsliste hinzufügen</Text>
-                        </View>
-                    </Pressable>
+                        text='Zu Einkaufsliste hinzufügen'
+                        icon='shopping-cart'
+                        color='default'
+                    />
                 </View>
 
                 {recipe.ingredients.length > 0 ?
                     <>
-                        <Text style={styles.title}>Zutaten ({recipe.ingredients.length})</Text>
-
+                        <StyledHeader text='Zutaten' count={recipe.ingredients.length} />
                         <View style={styles.container}>
                             {recipe.ingredients.map((ingredient: _Ingredient) => {
                                 return <Ingredient key={ingredient.key} content={ingredient} />
@@ -305,7 +276,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
 
                 {recipe.prepSteps.length > 0 ?
                     <>
-                        <Text style={styles.title}>Zubereitung ({recipe.prepSteps.length})</Text>
+                        <StyledHeader text='Zubereitung' count={recipe.prepSteps.length} />
                         <View style={styles.container}>
                             {recipe.prepSteps.map((step: _PrepStep) => {
                                 return <PrepStep key={step.key} content={step} />
@@ -316,7 +287,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                 }
 
 
-                <Tooltip
+                {/* <Tooltip
                     backgroundColor={Colors[scheme].text}
                     visible={open}
                     onOpen={() => {
@@ -326,39 +297,21 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                         setOpen(false);
                     }}
                     popover={<Text style={{ color: Colors[scheme].textOnTint }}>This is the popover text</Text>}
-                ><Text>TOOLTIP NOCH ZU MACHEN</Text></Tooltip>
+                ><Text>TOOLTIP NOCH ZU MACHEN</Text></Tooltip> */}
 
                 <View style={styles.containerButtons}>
-                    <Pressable
+                    <StyledButtonPressable
                         onPress={editRecipe}
-                        style={({ pressed }) => ({
-                            opacity: pressed ? 0.5 : 1,
-                            width: '100%'
-                        })}>
-                        <View style={{ ...styles.button, ...styles.editButton }}>
-                            <MaterialIcons
-                                name="edit"
-                                size={26}
-                                color={Colors[scheme].textOnTint}
-                            />
-                            <Text style={{ ...styles.buttonText, ...styles.editButtonText }}>Rezept bearbeiten</Text>
-                        </View>
-                    </Pressable>
-                    <Pressable
+                        text='Rezept bearbeiten'
+                        icon='edit'
+                        color='default'
+                    />
+                    <StyledButtonPressable
                         onPress={deleteAlert}
-                        style={({ pressed }) => ({
-                            opacity: pressed ? 0.5 : 1,
-                            width: '100%'
-                        })}>
-                        <View style={{ ...styles.button, ...styles.deleteButton }}>
-                            <MaterialIcons
-                                name="delete"
-                                size={20}
-                                color={Colors[scheme].error}
-                            />
-                            <Text style={{ ...styles.buttonText, ...styles.deleteButtonText }}>Rezept löschen</Text>
-                        </View>
-                    </Pressable>
+                        text='Rezept löschen'
+                        icon='delete'
+                        color='error'
+                    />
                 </View>
             </View>
         </ScrollView>
