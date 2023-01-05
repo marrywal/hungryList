@@ -89,11 +89,6 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
       width: 18,
       textAlign: 'right'
     },
-    separator: {
-      height: 1,
-      width: '100%',
-      backgroundColor: Colors[scheme].border
-    },
     itemButton: {
       display: 'flex',
       justifyContent: 'flex-start',

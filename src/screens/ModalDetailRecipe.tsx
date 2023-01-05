@@ -45,22 +45,29 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             paddingHorizontal: 15,
             backgroundColor: Colors[scheme].background,
         },
-        input60: {
-            width: '60%',
+        cardContainer: {
+            paddingTop: 20,
+            paddingHorizontal: 15,
+            backgroundColor: Colors[scheme].background,
+            margin: 15,
+            borderRadius: 10,
+            shadowColor: Colors[scheme].secondaryText,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 6,
         },
-        input40: {
-            width: '40%',
+        title: {
+            fontWeight: 'bold',
+            fontSize: 28,
+        },
+        secondaryText: {
+            color: Colors[scheme].secondaryText,
         },
         inputBox2: {
             display: 'flex',
             justifyContent: 'space-between',
             flexDirection: 'row',
             alignItems: 'center'
-        },
-        secondaryText: {
-            color: Colors[scheme].secondaryText,
-            width: 18,
-            textAlign: 'right'
         },
         itemButton: {
             display: 'flex',
@@ -84,11 +91,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             color: Colors[scheme].tint,
             fontSize: 18,
         },
-        prepStepsContent: {
-            flex: 1,
-            fontSize: 18,
-        },
-        ingredientsName: {
+        content: {
             flex: 1,
             fontSize: 18,
         },
@@ -96,6 +99,11 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             fontWeight: 'bold',
             marginRight: 10,
             fontSize: 18,
+        },
+        containerSeparator: {
+            borderBottomColor: Colors[scheme].input,
+            borderBottomWidth: 1,
+            paddingBottom: 20
         },
     });
 
@@ -176,14 +184,14 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     const Ingredient = ({ content }: { content: _Ingredient }) => {
         return (<View style={styles.box}>
             <Text style={styles.ingredientsAmount}>{content.amount} {content.unit}</Text>
-            <Text style={styles.ingredientsName}>{content.name}</Text>
+            <Text style={styles.content}>{content.name}</Text>
         </View>)
     };
 
     const PrepStep = ({ content }: { content: _PrepStep }) => {
         return (<View style={styles.box}>
             <Text style={styles.prepStepsCount}>{content.key}. </Text>
-            <Text style={styles.prepStepsContent}>{content.step}
+            <Text style={styles.content}>{content.step}
 
                 {/* <Tooltip key={content.key}
                     backgroundColor={Colors[scheme].text}
@@ -201,18 +209,16 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         </View>)
     };
 
-    const renderCounterButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>, buttonText?: string, spacingRight = false) => {
+    const renderCounterButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>) => {
         return <Pressable
             onPress={onClick}
             style={({ pressed }) => ({
-                marginRight: spacingRight ? 15 : 0,
                 backgroundColor: pressed
                     ? Colors[scheme].tintBackground
                     : Colors[scheme].background
             })}>
             <View style={buttonStyle}>
                 <MaterialIcons name={icon} size={20} color={Colors[scheme].tint} />
-                {buttonText ? <Text> {buttonText}</Text> : null}
             </View>
         </Pressable>
     }
@@ -236,22 +242,20 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     return (<>
         <ScrollView>
             <View>
-                {/* <View style={styles.container}>
-                    <Text>{recipe.title}</Text>
-                    <Text>{recipe.duration}</Text>
-                    <Text>{recipe.category}</Text>
-                </View> */}
 
-                <View style={styles.container}>
-                    <View style={styles.inputBox2}>
-                        <View style={styles.input60}>
-                            <Text>Rezept für {personCount} Personen</Text>
+                <View style={styles.cardContainer}>
+                    <Text style={styles.title}>{recipe.title}</Text>
+                    <View style={styles.containerSeparator}>
+                        <Text style={styles.secondaryText}>{recipe.category} | {recipe.duration}</Text>
+                    </View>
+                    <View style={{ ...styles.inputBox2, marginVertical: 10 }}>
+                        <View style={styles.inputBox2}>
+                            <MaterialIcons name='people' size={18} color={Colors[scheme].secondaryText} />
+                            <Text> Rezept für {personCount} Person{personCount > 1 ? 'en' : ''}</Text>
                         </View>
-                        <View style={{ ...styles.input40, ...styles.inputBox2, marginBottom: 20 }}>
+                        <View style={styles.inputBox2}>
                             {renderCounterButton(countPersonDown, 'remove-circle', styles.itemButton)}
-                            <Text style={styles.secondaryText}>{personCount}</Text>
-                            <MaterialIcons name='people' size={26} color={Colors[scheme].secondaryText} />
-                            {renderCounterButton(countPersonUp, 'add-circle', styles.itemButton, '', true)}
+                            {renderCounterButton(countPersonUp, 'add-circle', styles.itemButton)}
                         </View>
                     </View>
                     <StyledButtonPressable
@@ -304,7 +308,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                         onPress={editRecipe}
                         text='Rezept bearbeiten'
                         icon='edit'
-                        color='default'
+                        color='default-inverted'
                     />
                     <StyledButtonPressable
                         onPress={deleteAlert}

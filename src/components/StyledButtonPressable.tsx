@@ -7,7 +7,7 @@ import { Text, View } from '../components/Themed';
 interface Props extends PressableProps {
     text: string,
     icon: any,
-    color: "default" | "error",
+    color: "default" | "default-inverted" | "error",
     disabledButton?: boolean,
     customWidth?: boolean,
 }
@@ -25,10 +25,10 @@ export function StyledButtonPressable(props: Props) {
             alignItems: 'center',
             justifyContent: 'center',
             paddingHorizontal: 25,
-            marginBottom: 15,
         },
-        editButton: {
-            backgroundColor: Colors[scheme].tint
+        defaultButton: {
+            backgroundColor: Colors[scheme].tint,
+            marginBottom: 15,
         },
         deleteButton: {
             marginBottom: 35,
@@ -38,8 +38,11 @@ export function StyledButtonPressable(props: Props) {
             marginLeft: 5,
             fontWeight: 'bold',
         },
-        editButtonText: {
+        defaultButtonText: {
             color: Colors[scheme].textOnTint,
+        },
+        defaultInvertedButtonText: {
+            color: Colors[scheme].tint,
         },
         deleteButtonText: {
             color: Colors[scheme].error,
@@ -59,13 +62,24 @@ export function StyledButtonPressable(props: Props) {
             </View>
         }
 
-        return <View style={{ ...styles.button, ...styles.editButton }}>
+        if (props.color === 'default-inverted') {
+            return <View style={{ ...styles.button }}>
+                <MaterialIcons
+                    name={props.icon}
+                    size={26}
+                    color={Colors[scheme].tint}
+                />
+                <Text style={{ ...styles.buttonText, ...styles.defaultInvertedButtonText }}>{props.text}</Text>
+            </View>
+        }
+
+        return <View style={{ ...styles.button, ...styles.defaultButton }}>
             <MaterialIcons
                 name={props.icon}
                 size={26}
                 color={Colors[scheme].textOnTint}
             />
-            <Text style={{ ...styles.buttonText, ...styles.editButtonText }}>{props.text}</Text>
+            <Text style={{ ...styles.buttonText, ...styles.defaultButtonText }}>{props.text}</Text>
         </View>
     }
 
