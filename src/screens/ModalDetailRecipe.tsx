@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Alert, FlatList, Pressable, ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
@@ -36,7 +36,6 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                 />
             </Pressable>,
         });
-        console.log(recipe)
     });
 
     const styles = StyleSheet.create({
@@ -90,15 +89,21 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             fontWeight: 'bold',
             color: Colors[scheme].tint,
             fontSize: 18,
-        },
-        content: {
-            flex: 1,
-            fontSize: 18,
+            width: 35,
+            lineHeight: 24
         },
         ingredientsAmount: {
             fontWeight: 'bold',
             marginRight: 10,
             fontSize: 18,
+            flex: 1,
+            textAlign: 'right',
+            lineHeight: 24
+        },
+        content: {
+            flex: 3,
+            fontSize: 18,
+            lineHeight: 24
         },
         containerSeparator: {
             borderBottomColor: Colors[scheme].input,
