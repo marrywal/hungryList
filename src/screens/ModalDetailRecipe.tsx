@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, FlatList, Pressable, ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
@@ -7,8 +7,7 @@ import { Colors } from "../constants/Colors";
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../constants/interfaces';
-import { useNavigation } from '@react-navigation/native'
-import { Tooltip } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/native';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
 
@@ -251,7 +250,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                 <View style={styles.cardContainer}>
                     <Text style={styles.title}>{recipe.title}</Text>
                     <View style={styles.containerSeparator}>
-                        <Text style={styles.secondaryText}>{recipe.category} | {recipe.duration}</Text>
+                        <Text style={styles.secondaryText}>{recipe.category} {recipe.duration ? '|' : null} {recipe.duration}</Text>
                     </View>
                     <View style={{ ...styles.inputBox2, marginVertical: 10 }}>
                         <View style={styles.inputBox2}>

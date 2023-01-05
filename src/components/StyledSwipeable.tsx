@@ -16,12 +16,6 @@ export function StyledSwipeable(props: Props) {
   const scheme = useColorScheme();
 
   const styles = StyleSheet.create({
-    actionText: {
-      color: 'white',
-      fontSize: 16,
-      backgroundColor: 'transparent',
-      padding: 10,
-    },
     rightAction: {
       alignItems: 'center',
       flex: 1,

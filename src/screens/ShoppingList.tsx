@@ -62,12 +62,6 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       justifyContent: 'space-between',
       backgroundColor: 'transparent'
     },
-    header: {
-      fontSize: 12,
-      marginHorizontal: 10,
-      marginBottom: 5,
-      marginTop: 20
-    },
     title: {
       fontSize: 18,
     },
