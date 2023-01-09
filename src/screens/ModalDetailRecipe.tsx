@@ -111,20 +111,6 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         },
     });
 
-    /* TODO: 
-    title | als favorit hinzufügen - herz
-    zeitaufwand
-    zutaten für x personen (+ | -)
-    button - zu einkaufsliste hinzufügen
-    ---
-    kategorie? 
-    zutatenliste (name, menge, einheit)
-    schritte
-    ---
-    rezept löschen
-    rezept bearbeiten?
-    */
-
     const markAsFavorite = async () => {
         setIsFavorite(!isFavorite);
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextProps } from 'react-native';
+import { NavigationColors } from '../constants/Colors';
+import useColorScheme from '../hooks/useColorScheme';
 import { Text } from './Themed';
 
 interface Props extends TextProps {
@@ -8,12 +10,15 @@ interface Props extends TextProps {
 }
 
 export function StyledHeader(props: Props) {
+  const scheme = useColorScheme();
+  
   const styles = StyleSheet.create({
     title: {
       fontSize: 12,
-      marginHorizontal: 10,
-      marginBottom: 5,
-      marginTop: 20
+      paddingHorizontal: 10,
+      paddingBottom: 5,
+      paddingTop: 20,
+      backgroundColor: NavigationColors[scheme].colors.background,
     },
   });
 

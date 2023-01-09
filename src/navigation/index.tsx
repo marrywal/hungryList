@@ -67,7 +67,7 @@ function RootNavigator() {
           title: getHeaderTitle(route),
           headerRight: () => {
             return <Pressable
-              onPress={() => navigation.navigate('ModalNewRecipe')}
+              onPress={() => getHeaderTitle(route) === 'Meine Rezepte' ? navigation.navigate('ModalNewRecipe') : null}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
                 width: 36,

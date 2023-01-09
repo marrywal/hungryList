@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, SectionList, StatusBar, StyleSheet } from 'react-native';
+import { Keyboard, Pressable, SafeAreaView, SectionList, StatusBar, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
@@ -6,15 +6,17 @@ import useColorScheme from '../hooks/useColorScheme';
 import { Colors } from "../constants/Colors";
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { _RecipeList } from '../constants/interfaces';
+import { _Recipe, _RecipeList } from '../constants/interfaces';
 import { StyledHeader } from '../components/StyledHeader';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
+import dynamicSort from '../hooks/dynamicSort';
+import { StyledTextInput } from '../components/StyledTextInput';
 
 const DEFAULTDATA = [
   {
     categoryName: "Vorspeisen",
     data: [
-      
+
     ]
   },
   {
@@ -160,24 +162,24 @@ const DEFAULTDATA = [
 ];
 
 export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
+  const [masterDataSource, setMasterDataSource] = useState<_RecipeList[]>([]);
   const [recipeListItems, setRecipeListItems] = useState<_RecipeList[]>([]);
   const [retrieve, setRetrieve] = useState(true);
+  const [search, setSearch] = useState("");
   const scheme = useColorScheme();
+
 
   /* TODO:
   - spashscreen
   - loadingscreen?
-  - createContext
   - https://github.com/Shopify/restyle
-  - new recipe: mark as favorite (wird als erstes angezeigt)
   - new recipe: save picture?
-  - searchbar on recipes page https://reactnativeelements.com/docs/components/searchbar
   - 
   */
 
   useEffect(() => {
     // AsyncStorage.removeItem('@recipeList');
-    const unsubscribe = navigation.addListener('focus', () => {
+    navigation.addListener('focus', () => {
       const retrieveData = async () => {
         try {
           let itemsString = await AsyncStorage.getItem('@recipeList');
@@ -185,8 +187,12 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
             AsyncStorage.setItem('@recipeList', JSON.stringify(DEFAULTDATA));
             itemsString = await AsyncStorage.getItem('@recipeList');
           }
-          const allItems = itemsString ? JSON.parse(itemsString) : [];
-          setRecipeListItems(allItems);
+          let allItems = itemsString ? JSON.parse(itemsString) : [];
+
+          sortByFavoriteAndTitle(allItems);
+
+          setRecipeListItems([...allItems]);
+          setMasterDataSource([...allItems]);
         } catch (error) {
           console.log(error);
         }
@@ -198,9 +204,25 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       }
     });
 
-    return unsubscribe;
-
   }, [navigation]);
+
+  const sortByFavoriteAndTitle = (allItems: _RecipeList[]) => {
+    return allItems.forEach((cat: _RecipeList) => {
+      let favItems: _Recipe[] = [];
+      let notFavItems: _Recipe[] = [];
+      cat.data.forEach((item: _Recipe) => {
+        if (item.isFavorite) {
+          favItems.push(item);
+        } else {
+          notFavItems.push(item);
+        }
+      });
+      favItems = favItems.sort(dynamicSort("title"));
+      notFavItems = notFavItems.sort(dynamicSort("title"));
+      cat.data = favItems;
+      cat.data.push(...notFavItems);
+    });
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -254,15 +276,44 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       fontSize: 14,
       color: Colors[scheme].secondaryText,
     },
+    searchbar: {
+      backgroundColor: Colors[scheme].input,
+      paddingVertical: 9,
+      paddingRight: 13,
+      paddingLeft: 35,
+      fontSize: 15,
+      borderRadius: 8,
+      color: Colors[scheme].text,
+      width: '100%',
+      flex: 1,
+    },
+    searchIcon: {
+      color: Colors[scheme].placeholder,
+      paddingVertical: 9,
+      paddingLeft: 13,
+      marginVertical: 10,
+      marginLeft: 13,
+      position: 'absolute',
+      zIndex: 1,
+    },
+    inputContainer: {
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderBottomWidth: 0.25,
+      borderBottomColor: Colors[scheme].border,
+      backgroundColor: Colors[scheme].background,
+      display: 'flex',
+      flexDirection: 'row',
+    },
   });
 
   const onItemClick = (item: any) => {
     navigation.navigate('ModalDetailRecipe', item);
   }
 
-  const isListEmpty = () => {
+  const isListEmpty = (list: _RecipeList[]) => {
     let isEmpty = true;
-    recipeListItems.forEach((list: any) => {
+    list.forEach((list: any) => {
       if (list.data.length > 0) {
         isEmpty = false;
       }
@@ -311,9 +362,35 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       </Pressable>)
   };
 
+  const updateSearch = (search: string) => {
+    if (search === '') {
+      setRecipeListItems([...masterDataSource]);
+      setSearch(search);
+      return;
+    }
+
+    let filteredItems = JSON.parse(JSON.stringify(masterDataSource));
+    filteredItems.forEach((cat: _RecipeList) => {
+      let filteredData: _Recipe[] = [];
+      cat.data.forEach((item: _Recipe) => {
+        if (item.title.toLowerCase().includes(search.toLowerCase())) {
+          filteredData.push(item);
+        }
+      });
+      cat.data = filteredData;
+    });
+    setRecipeListItems(filteredItems);
+    setSearch(search);
+  };
+
+  const deleteSearch = () => {
+    setRecipeListItems(masterDataSource);
+    setSearch('');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      {isListEmpty()
+      {isListEmpty(masterDataSource)
         ?
         <View style={styles.emptyScreen}>
           <MaterialIcons
@@ -333,19 +410,62 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
           />
         </View>
         :
-        <SectionList
-          renderItem={({ item }) =>
-            <Item item={item} />}
-          sections={recipeListItems}
-          keyExtractor={(item, index) => item.category + index}
-          renderSectionHeader={({ section: { categoryName, data } }) => {
-            if (data.length > 0) {
-              return <StyledHeader text={categoryName} count={data.length} />
-            }
-            return null;
-          }}
-          stickySectionHeadersEnabled={false}
-        />
+        <View style={{ height: '100%' }}>
+          <View style={styles.inputContainer}>
+            <MaterialIcons
+              name='search'
+              size={18}
+              color={Colors[scheme].border}
+              style={styles.searchIcon}
+            />
+            <StyledTextInput
+              returnKeyType='default'
+              placeholder="Durchsuchen..."
+              onChangeText={(text) => updateSearch(text)}
+              value={search}
+              style={styles.searchbar}
+              blurOnSubmit={true}
+            />
+          </View>
+
+          {isListEmpty(recipeListItems)
+            ?
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.emptyScreen}>
+              <MaterialIcons
+                name="fastfood"
+                size={120}
+                color={Colors[scheme].border}
+              />
+              <Text style={styles.emptyScreenText}>
+                Keine Rezepte gefunden
+              </Text>
+              <StyledButtonPressable
+                onPress={deleteSearch}
+                text='Suche löschen'
+                icon='search'
+                color='default'
+                customWidth={true}
+              />
+            </View>
+            </TouchableWithoutFeedback>
+            :
+            <SectionList
+              renderItem={({ item }) =>
+                <Item item={item} />}
+              sections={recipeListItems}
+              keyExtractor={(item, index) => item.category + index}
+              renderSectionHeader={({ section: { categoryName, data } }) => {
+                if (data.length > 0) {
+                  return <StyledHeader text={categoryName} count={data.length} />
+                }
+                return null;
+              }}
+              stickySectionHeadersEnabled={true}
+              contentInset={{top: -15}}
+            />
+          }
+        </View>
       }
     </SafeAreaView>
   );
