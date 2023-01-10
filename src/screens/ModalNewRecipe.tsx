@@ -195,7 +195,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
       return;
     }
 
-    const title = newRecipe.title.charAt(0).toUpperCase() + newRecipe.title.slice(1);
+    const title = newRecipe.title.trim().charAt(0).toUpperCase() + newRecipe.title.trim().slice(1);
     recipe.title = title;
     recipe.personCount = personCount;
     recipe.ingredients = allIngredients;
