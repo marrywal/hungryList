@@ -131,7 +131,7 @@ function BottomTabNavigator() {
         component={Recipes}
         options={({ navigation }: RootTabScreenProps<'Recipes'>) => ({
           headerTitle: 'Meine Rezepte',
-          tabBarIcon: ({ color }) => <TabBarIcon name="fastfood" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="menu-book" color={color} />
         })}
       />
       <BottomTab.Screen

@@ -394,7 +394,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
         ?
         <View style={styles.emptyScreen}>
           <MaterialIcons
-            name="fastfood"
+            name="menu-book"
             size={120}
             color={Colors[scheme].border}
           />
@@ -433,7 +433,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.emptyScreen}>
               <MaterialIcons
-                name="fastfood"
+                name="menu-book"
                 size={120}
                 color={Colors[scheme].border}
               />

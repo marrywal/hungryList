@@ -150,7 +150,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
         })}>
         <View style={styles.item}>
           <Text style={styles.title}>{itemTitle}</Text>
-          <Text style={styles.count}>{item.count}</Text>
+          <Text style={styles.count}>100gr</Text>
         </View>
       </Pressable>)
   };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { Alert, Pressable, ScrollView, Share, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
@@ -109,6 +109,9 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             borderBottomWidth: 1,
             paddingBottom: 20
         },
+        personText: {
+            fontSize: 16,
+        },
     });
 
     const markAsFavorite = async () => {
@@ -137,6 +140,27 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     const editRecipe = () => {
         console.log('edit recipe') // TODO: 
     }
+
+    const sendRecipe = async () => {
+        let messageToSend = recipe.title + '\n';
+
+        recipe.ingredients.forEach(ingr => {
+            messageToSend += `\n${ingr.amount} ${ingr.unit} ${ingr.name}`;
+        });
+
+
+        recipe.prepSteps.forEach(step => {
+            messageToSend += `\n\n${step.key}. ${step.step}`;
+        });
+
+        try {
+            await Share.share({
+                message: messageToSend,
+            }); 
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     const deleteRecipe = async () => {
         const itemsString = await AsyncStorage.getItem('@recipeList');
@@ -241,7 +265,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                     <View style={{ ...styles.inputBox2, marginVertical: 10 }}>
                         <View style={styles.inputBox2}>
                             <MaterialIcons name='people' size={18} color={Colors[scheme].secondaryText} />
-                            <Text> Rezept für {personCount} Person{personCount > 1 ? 'en' : ''}</Text>
+                            <Text style={styles.personText}> Rezept für {personCount} Person{personCount > 1 ? 'en' : ''}</Text>
                         </View>
                         <View style={styles.inputBox2}>
                             {renderCounterButton(countPersonDown, 'remove-circle', styles.itemButton)}
@@ -298,6 +322,12 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                         onPress={editRecipe}
                         text='Rezept bearbeiten'
                         icon='edit'
+                        color='default-inverted'
+                    />
+                    <StyledButtonPressable
+                        onPress={sendRecipe}
+                        text='Rezept teilen'
+                        icon='ios-share'
                         color='default-inverted'
                     />
                     <StyledButtonPressable
