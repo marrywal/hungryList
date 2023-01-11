@@ -302,7 +302,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
                     <View style={styles.input60}>
                       <StyledTextInput
                         value={ingredient.amount}
-                        style={styles.input}
+                        style={{ ...styles.input, marginRight: 15 }}
                         onChangeText={text => editIngredient(text, index, 'amount')}
                         placeholder="Menge"
                         keyboardType="numeric"
@@ -314,7 +314,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
                       <StyledTextInput
                         value={ingredient.unit}
                         onChangeText={text => editIngredient(text, index, 'unit')}
-                        style={{ ...styles.input, marginLeft: 15 }}
+                        style={styles.input}
                         placeholder="Einheit"
                       // ref={refDuration}
                       // onSubmitEditing={() => refDuration.current?.focus()}

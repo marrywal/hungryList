@@ -16,7 +16,6 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     const [isFavorite, setIsFavorite] = useState<boolean>(recipe.isFavorite);
     const scheme = useColorScheme();
     const nav = useNavigation();
-    const [open, setOpen] = useState(false);
     const [personCount, setPersonCount] = useState<number>(2);
 
 
@@ -105,9 +104,9 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             lineHeight: 24
         },
         containerSeparator: {
-            borderBottomColor: Colors[scheme].input,
-            borderBottomWidth: 1,
-            paddingBottom: 20
+            borderTopColor: Colors[scheme].input,
+            borderTopWidth: 1,
+            paddingTop: 10,
         },
         personText: {
             fontSize: 16,
@@ -156,7 +155,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         try {
             await Share.share({
                 message: messageToSend,
-            }); 
+            });
         } catch (error) {
             console.log(error)
         }
@@ -256,28 +255,32 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     return (<>
         <ScrollView>
             <View>
-
                 <View style={styles.cardContainer}>
                     <Text style={styles.title}>{recipe.title}</Text>
-                    <View style={styles.containerSeparator}>
+                    <View style={{ marginBottom: 20 }}>
                         <Text style={styles.secondaryText}>{recipe.category} {recipe.duration ? '|' : null} {recipe.duration}</Text>
                     </View>
-                    <View style={{ ...styles.inputBox2, marginVertical: 10 }}>
-                        <View style={styles.inputBox2}>
-                            <MaterialIcons name='people' size={18} color={Colors[scheme].secondaryText} />
-                            <Text style={styles.personText}> Rezept für {personCount} Person{personCount > 1 ? 'en' : ''}</Text>
-                        </View>
-                        <View style={styles.inputBox2}>
-                            {renderCounterButton(countPersonDown, 'remove-circle', styles.itemButton)}
-                            {renderCounterButton(countPersonUp, 'add-circle', styles.itemButton)}
-                        </View>
-                    </View>
-                    <StyledButtonPressable
-                        onPress={addIngredientsToShoppingList}
-                        text='Zu Einkaufsliste hinzufügen'
-                        icon='shopping-cart'
-                        color='default'
-                    />
+                    {recipe.ingredients.length > 0 ?
+                        <>
+                            <View style={{ ...styles.inputBox2, ...styles.containerSeparator, marginBottom: 10 }}>
+                                <View style={styles.inputBox2}>
+                                    <MaterialIcons name='people' size={18} color={Colors[scheme].secondaryText} />
+                                    <Text style={styles.personText}> Rezept für {personCount} Person{personCount > 1 ? 'en' : ''}</Text>
+                                </View>
+                                <View style={styles.inputBox2}>
+                                    {renderCounterButton(countPersonDown, 'remove-circle', styles.itemButton)}
+                                    {renderCounterButton(countPersonUp, 'add-circle', styles.itemButton)}
+                                </View>
+                            </View>
+                            <StyledButtonPressable
+                                onPress={addIngredientsToShoppingList}
+                                text='Zu Einkaufsliste hinzufügen'
+                                icon='shopping-cart'
+                                color='default'
+                            />
+                        </>
+                        : null
+                    }
                 </View>
 
                 {recipe.ingredients.length > 0 ?
@@ -324,12 +327,15 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                         icon='edit'
                         color='default-inverted'
                     />
-                    <StyledButtonPressable
-                        onPress={sendRecipe}
-                        text='Rezept teilen'
-                        icon='ios-share'
-                        color='default-inverted'
-                    />
+                    {recipe.ingredients.length > 0 ?
+                        <StyledButtonPressable
+                            onPress={sendRecipe}
+                            text='Rezept teilen'
+                            icon='ios-share'
+                            color='default-inverted'
+                        />
+                        : null
+                    }
                     <StyledButtonPressable
                         onPress={deleteAlert}
                         text='Rezept löschen'
