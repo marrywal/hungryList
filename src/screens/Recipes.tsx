@@ -27,7 +27,7 @@ const DEFAULTDATA = [
         personCount: 2,
         duration: '50 min',
         category: 'Hauptspeise',
-        ingredients: [
+        ingredientsPerPerson: [
           {
             key: 1,
             name: 'Kokosfett zum Braten',
@@ -37,7 +37,7 @@ const DEFAULTDATA = [
           {
             key: 2,
             name: 'große Zwiebel',
-            amount: 'halbe',
+            amount: '0,5',
             unit: ''
           },
           {

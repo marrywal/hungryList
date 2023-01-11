@@ -25,7 +25,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     personCount: 0,
     duration: '',
     category: 'Hauptspeise',
-    ingredients: [],
+    ingredientsPerPerson: [],
     prepSteps: [],
     isFavorite: false
   });
@@ -188,6 +188,18 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     setAllPrepSteps(preps);
   }
 
+  const getIngredientsPerPerson = () => {
+    let ingredientsPerPerson: _Ingredient[] = [];
+
+    allIngredients.forEach((ingr: _Ingredient) => {
+      let amountPerPerson = parseFloat(ingr.amount.replace(',', '.')) / personCount;
+      ingr.amount = amountPerPerson.toString();
+      ingredientsPerPerson.push(ingr);
+    });
+
+    return ingredientsPerPerson;
+  }
+
   const saveNewItem = async () => {
     const recipe = { ...newRecipe };
 
@@ -198,7 +210,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     const title = newRecipe.title.trim().charAt(0).toUpperCase() + newRecipe.title.trim().slice(1);
     recipe.title = title;
     recipe.personCount = personCount;
-    recipe.ingredients = allIngredients;
+    recipe.ingredientsPerPerson = getIngredientsPerPerson();
     recipe.prepSteps = allPrepSteps;
 
     const itemsString = await AsyncStorage.getItem('@recipeList');

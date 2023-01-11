@@ -28,7 +28,8 @@ export interface _Recipe {
     personCount: number,
     duration: string,
     category: _Category,
-    ingredients: _Ingredient[],
+    ingredients?: _Ingredient[],
+    ingredientsPerPerson: _Ingredient[],
     prepSteps: _PrepStep[],
     isFavorite: boolean,
 }
