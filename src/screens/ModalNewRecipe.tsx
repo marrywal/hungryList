@@ -15,7 +15,7 @@ import { StyledTextInput } from '../components/StyledTextInput';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
 
-export default function ModalNewRecipe({ navigation }: { navigation: any }) {
+export default function ModalNewRecipe({ navigation, route }: { navigation: any, route: any }) {
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [allIngredients, setAllIngedients] = useState<_Ingredient[]>([]);
   const [allPrepSteps, setAllPrepSteps] = useState<_PrepStep[]>([]);
@@ -37,6 +37,7 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
 
   useEffect(() => {
     nav.setOptions({
+      // title: route.params[0] === 'edit' ? 'Neues Rezept' : 'Rezept bearbeiten',
       headerRight: () => <Pressable
         onPress={saveNewItem}
         style={({ pressed }) => ({
@@ -192,8 +193,10 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     let ingredientsPerPerson: _Ingredient[] = [];
 
     allIngredients.forEach((ingr: _Ingredient) => {
-      let amountPerPerson = parseFloat(ingr.amount.replace(',', '.')) / personCount;
-      ingr.amount = amountPerPerson.toString();
+      if (ingr.amount) {
+        let amountPerPerson = parseFloat(ingr.amount.replace(',', '.')) / personCount;
+        ingr.amount = amountPerPerson.toString();
+      }
       ingredientsPerPerson.push(ingr);
     });
 
@@ -256,7 +259,8 @@ export default function ModalNewRecipe({ navigation }: { navigation: any }) {
     <ScrollView>
       <KeyboardAvoidingView
         keyboardVerticalOffset={headerHeight}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ paddingBottom: 25 }}>
             <View style={styles.container}>

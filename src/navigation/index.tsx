@@ -87,9 +87,7 @@ function RootNavigator() {
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="ModalNewRecipe" component={ModalNewRecipe}
-          options={({ navigation }) => ({
-            title: 'Neues Rezept'
-          })}
+          options={({ navigation }) => ({})}
         />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'card' }}>
