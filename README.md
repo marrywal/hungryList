@@ -2,7 +2,7 @@
 
 HungryList is a recipe app with build in shopping list feature.
 
-## Installation on Windows
+## Install and run
 
 ```bash
 npm install -g expo-cli
@@ -18,6 +18,6 @@ To run the app:
 expo start
 ```
 
-This will then generate a QR code that will run the program on your iOS device.
+This will generate a QR code that runs the program on your device.
 
 Install the ExpoRun app and open the project using the camera to scan the QR code.
