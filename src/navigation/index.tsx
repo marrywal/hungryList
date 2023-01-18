@@ -129,18 +129,19 @@ function BottomTabNavigator() {
         name="Recipes"
         component={Recipes}
         options={({ navigation }: RootTabScreenProps<'Recipes'>) => ({
-          headerTitle: 'Meine Rezepte',
+          title: 'Meine Rezepte',
           tabBarIcon: ({ color }) => <TabBarIcon name="menu-book" color={color} />
         })}
       />
-      <BottomTab.Screen
+      {/* TODO: */}
+      {/* <BottomTab.Screen
         name="Settings"
         component={Settings}
         options={{
           title: 'Einstellungen',
           tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />,
         }}
-      />
+      /> */}
     </BottomTab.Navigator>
   );
 }
