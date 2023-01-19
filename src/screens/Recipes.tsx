@@ -11,7 +11,7 @@ import { StyledHeader } from '../components/StyledHeader';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import dynamicSort from '../hooks/dynamicSort';
 import { StyledTextInput } from '../components/StyledTextInput';
-import { useGlobalStyles } from '../constants/styles';
+import { useGlobalStyles } from '../constants/styles/globalStyles';
 
 const DEFAULTDATA = [
   {

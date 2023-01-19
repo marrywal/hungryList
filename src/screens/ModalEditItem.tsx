@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
@@ -10,7 +10,7 @@ import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../cons
 import { useNavigation } from '@react-navigation/native';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
-import { useGlobalStyles } from '../constants/styles';
+import { useGlobalStyles } from '../constants/styles/globalStyles';
 
 export default function ModalEditItem({ navigation, route }: { navigation: any, route: any }) {
     const [item, setItem] = useState<_Ingredient>(route.params);

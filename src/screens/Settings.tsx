@@ -1,11 +1,11 @@
-import { Platform, Pressable, SafeAreaView, SectionList, StatusBar, StyleSheet, Switch } from 'react-native';
+import { Platform, Pressable, SafeAreaView, SectionList, Switch } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { useState } from 'react';
 import { Colors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import { StyledHeader } from '../components/StyledHeader';
-import { useGlobalStyles } from '../constants/styles';
+import { useGlobalStyles } from '../constants/styles/globalStyles';
 const DEFAULTDATA = [
   {
     categoryName: "Anzeige",

@@ -1,7 +1,15 @@
 import { ColorSchemeName, StatusBar, StyleSheet } from "react-native";
 import React from "react";
-import useColorScheme from "../hooks/useColorScheme";
-import { Colors } from "./Colors";
+import useColorScheme from "../../hooks/useColorScheme";
+import { Colors } from "../Colors";
+
+const defaults = StyleSheet.create({
+    flexRowCenter: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+})
 
 const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.create({
     container: {
@@ -34,33 +42,25 @@ const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.cre
         paddingRight: 15,
         borderBottomWidth: 0.25,
         borderBottomColor: Colors[scheme].border,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        ...defaults.flexRowCenter
     },
     shoppingItem: {
         borderBottomWidth: 0.25,
         borderBottomColor: Colors[scheme].border,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...defaults.flexRowCenter,
         width: '100%',
     },
     itemContent: {
         flex: 1,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...defaults.flexRowCenter,
         justifyContent: 'space-between',
         backgroundColor: 'transparent'
     },
     itemButton: {
-        display: 'flex',
+        ...defaults.flexRowCenter,
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
         paddingHorizontal: 15,
         paddingVertical: 10,
     },
@@ -69,9 +69,7 @@ const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.cre
         paddingHorizontal: 20,
         borderBottomWidth: 0.25,
         borderBottomColor: Colors[scheme].border,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...defaults.flexRowCenter,
         justifyContent: 'space-between',
         backgroundColor: 'transparent'
     },
@@ -91,9 +89,7 @@ const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.cre
         marginBottom: 20
     },
     subtitle: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...defaults.flexRowCenter,
         marginTop: 3,
     },
     subtitleText: {
@@ -142,10 +138,8 @@ const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.cre
         width: '40%',
     },
     inputBox2: {
-        display: 'flex',
+        ...defaults.flexRowCenter,
         justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center'
     },
     separator: {
         marginVertical: 30,

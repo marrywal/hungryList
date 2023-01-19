@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
 import { Tooltip } from '@rneui/themed';
-import { useGlobalStyles } from '../constants/styles';
+import { useGlobalStyles } from '../constants/styles/globalStyles';
 
 export default function ModalDetailRecipe({ navigation, route }: { navigation: any, route: any }) {
     const [recipe, setRecipe] = useState<_Recipe>(route.params);

@@ -14,7 +14,7 @@ import { StyledButtonGroup } from '../components/StyledButtonGroup';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
-import { useGlobalStyles } from '../constants/styles';
+import { useGlobalStyles } from '../constants/styles/globalStyles';
 
 export default function ModalNewRecipe({ navigation, route }: { navigation: any, route: any }) {
   const recipeToEdit = route.params[1];

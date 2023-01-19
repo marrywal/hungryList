@@ -1,4 +1,4 @@
-import { SafeAreaView, SectionList, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Touchable, TouchableOpacity } from "react-native";
+import { SafeAreaView, SectionList, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
@@ -10,7 +10,7 @@ import React from "react";
 import { _Ingredient, _ShoppingList } from "../constants/interfaces";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyledTextInput } from '../components/StyledTextInput';
-import { useGlobalStyles } from "../constants/styles";
+import { useGlobalStyles } from "../constants/styles/globalStyles";
 
 export default function ShoppingList({ navigation }: RootTabScreenProps<'ShoppingList'>) {
   const [listItems, setListItems] = useState<_ShoppingList[]>([]);
