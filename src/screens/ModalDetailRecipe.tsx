@@ -162,8 +162,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     }
 
     const editRecipe = () => {
-        // navigation.navigate('ModalNewRecipe', ['edit', recipe]);
-        console.log('edit recipe') // TODO: 
+        navigation.navigate('ModalNewRecipe', ['edit', recipe]);
     }
 
     const sendRecipe = async () => {

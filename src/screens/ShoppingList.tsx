@@ -113,7 +113,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
 
   const onItemClick = (item: any) => {
     const list = [...listItems];
-    const index = list[0].data.indexOf(item)
+    const index = list[0].data.indexOf(item);
     if (index > -1) {
       list[0].data.splice(index, 1);
       setListItems(list);

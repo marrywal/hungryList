@@ -6,7 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { _Ingredient } from './src/constants/interfaces';
+import { _Ingredient, _Recipe } from './src/constants/interfaces';
 
 declare global {
   namespace ReactNavigation {
@@ -16,7 +16,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  ModalNewRecipe: undefined;
+  ModalNewRecipe: [string, _Recipe?];
   ModalDetailRecipe: undefined;
   ModalEditItem: _Ingredient;
   NotFound: undefined;

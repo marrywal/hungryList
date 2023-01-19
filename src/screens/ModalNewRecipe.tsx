@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleProp, StyleSheet, TouchableWithoutFeedback, ViewStyle } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, StyleProp, StyleSheet, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -16,11 +16,16 @@ import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
 
 export default function ModalNewRecipe({ navigation, route }: { navigation: any, route: any }) {
+  const recipeToEdit = route.params[1];
+  const oldTitle = recipeToEdit ? JSON.parse(JSON.stringify(recipeToEdit.title)) : '';
+  const oldCategory = recipeToEdit ? JSON.parse(JSON.stringify(recipeToEdit.category)) : '';
+  const allCategories = ['Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk', 'Snack'];
+
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [allIngredients, setAllIngedients] = useState<_Ingredient[]>([]);
-  const [allPrepSteps, setAllPrepSteps] = useState<_PrepStep[]>([]);
+  const [allIngredients, setAllIngedients] = useState<_Ingredient[]>(recipeToEdit ? recipeToEdit.ingredients : []);
+  const [allPrepSteps, setAllPrepSteps] = useState<_PrepStep[]>(recipeToEdit ? recipeToEdit.prepSteps : []);
   const [personCount, setPersonCount] = useState<number>(2);
-  const [newRecipe, setNewRecipe] = useState<_Recipe>({
+  const [newRecipe, setNewRecipe] = useState<_Recipe>(recipeToEdit ? recipeToEdit : {
     title: '',
     personCount: 0,
     duration: '',
@@ -33,11 +38,14 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
   const headerHeight = useHeaderHeight();
   const nav = useNavigation();
 
-  // TODO: const refDuration = React.useRef<TextInput | null>(null);
-
   useEffect(() => {
+    if (recipeToEdit) {
+      setSelectedIndex(allCategories.indexOf(oldCategory));
+      setPersonCount(recipeToEdit.personCount); // TODO: funkt no ned richtig
+    }
+
     nav.setOptions({
-      // title: route.params[0] === 'edit' ? 'Neues Rezept' : 'Rezept bearbeiten', // TODO: 
+      title: route.params[0] === 'add' ? 'Neues Rezept' : 'Rezept bearbeiten',
       headerRight: () => <Pressable
         onPress={saveNewItem}
         style={({ pressed }) => ({
@@ -61,7 +69,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
         />
       </Pressable>,
     });
-  });
+  }, [navigation]);
 
   const styles = StyleSheet.create({
     input60: {
@@ -135,6 +143,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
   }
 
   const selectCategory = (value: number) => {
+    console.log(value)
     setSelectedIndex(value);
 
     const categories: _Category[] = ["Vorspeise", "Hauptspeise", "Nachspeise", "Getränk", "Snack"];
@@ -220,8 +229,16 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
     const allItems = itemsString ? JSON.parse(itemsString) : [];
 
     allItems.forEach((list: _RecipeList) => {
+      if (route.params[0] === 'edit') {
+        if (list.categoryName.includes(oldCategory)) {
+          const index = list.data.findIndex(x => x.title === oldTitle);
+          if (index > -1) {
+            list.data.splice(index, 1);
+          }
+        }
+      }
       if (list.categoryName.includes(newRecipe.category)) {
-        list.data.push(recipe)
+        list.data.push(recipe);
       }
     });
 
@@ -259,8 +276,8 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
     <ScrollView>
       <KeyboardAvoidingView
         keyboardVerticalOffset={headerHeight}
-        // behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ paddingBottom: 25 }}>
             <View style={styles.container}>
@@ -292,7 +309,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
               </View>
               <View>
                 <StyledButtonGroup
-                  buttons={['Vorspeise', 'Hauptspeise', 'Nachspeise', 'Getränk', 'Snack']}
+                  buttons={allCategories}
                   selectedIndex={selectedIndex}
                   onPress={text => selectCategory(text)}
                 />

@@ -174,7 +174,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   - loadingscreen?
   - https://github.com/Shopify/restyle
   - new recipe: save picture?
-  - 
+  - id hinzufügen oder name schon vorhanden prüfen
   */
 
   useEffect(() => {
@@ -402,7 +402,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
             Noch keine Rezepte gespeichert
           </Text>
           <StyledButtonPressable
-            onPress={() => navigation.navigate('ModalNewRecipe')}
+            onPress={() => navigation.navigate('ModalNewRecipe', ['add'])}
             text='Neues Rezept'
             icon='add'
             color='default'
