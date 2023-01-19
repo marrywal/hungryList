@@ -37,7 +37,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
 
   useEffect(() => {
     nav.setOptions({
-      // title: route.params[0] === 'edit' ? 'Neues Rezept' : 'Rezept bearbeiten',
+      // title: route.params[0] === 'edit' ? 'Neues Rezept' : 'Rezept bearbeiten', // TODO: 
       headerRight: () => <Pressable
         onPress={saveNewItem}
         style={({ pressed }) => ({

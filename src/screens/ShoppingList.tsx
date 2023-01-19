@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
+import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Touchable, TouchableOpacity } from "react-native";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useHeaderHeight } from '@react-navigation/elements';
 import React from "react";
-import { _ShoppingItem, _ShoppingList } from "../constants/interfaces";
+import { _Ingredient, _ShoppingList } from "../constants/interfaces";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyledTextInput } from '../components/StyledTextInput';
 
@@ -17,24 +17,28 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
   const [newItem, setNewItem] = useState('');
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
-  const listRef = React.useRef<SectionList<_ShoppingItem, _ShoppingList>>(null)
+  const listRef = React.useRef<SectionList<_Ingredient, _ShoppingList>>(null)
 
   useEffect(() => {
-    const retrieveData = async () => {
-      try {
-        const itemsString = await AsyncStorage.getItem('@shoppingList');
-        const allItems = itemsString ? JSON.parse(itemsString) : [];
-        setListItems(allItems);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // AsyncStorage.removeItem('@shoppingList');
+    navigation.addListener('focus', () => {
+      const retrieveData = async () => {
+        try {
+          const itemsString = await AsyncStorage.getItem('@shoppingList');
+          const allItems = itemsString ? JSON.parse(itemsString) : [];
+          setListItems(allItems);
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    if (retrieve) {
-      retrieveData();
-      setRetrieve(false);
-    }
-  }, [retrieve]);
+      if (retrieve) {
+        retrieveData();
+        setRetrieve(false);
+      }
+    });
+
+  }, [navigation]);
 
   const styles = StyleSheet.create({
     container: {
@@ -52,15 +56,12 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       fontSize: 16
     },
     item: {
-      paddingVertical: 10,
-      paddingHorizontal: 20,
       borderBottomWidth: 0.25,
       borderBottomColor: Colors[scheme].border,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: 'transparent'
+      width: '100%',
     },
     title: {
       fontSize: 18,
@@ -90,7 +91,24 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       alignItems: 'center',
       justifyContent: 'center',
       marginLeft: 10
-    }
+    },
+    itemName: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      paddingVertical: 13,
+      paddingHorizontal: 20,
+      flex: 2,
+    },
+    itemDetails: {
+      borderLeftWidth: 0.5,
+      borderLeftColor: Colors[scheme].border,
+      paddingVertical: 5,
+      paddingHorizontal: 13,
+      marginVertical: 10,
+
+      flex: 1,
+    },
   });
 
   const onItemClick = (item: any) => {
@@ -117,9 +135,15 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       }]
     }
 
+    const newKey = list[0].data.length + 1;
+    const title = newItem.trim();
+    const itemTitle = title.charAt(0).toUpperCase() + title.slice(1);
+
     list[0].data.push({
-      title: newItem,
-      count: ''
+      name: itemTitle,
+      amount: '',
+      unit: '',
+      key: newKey
     });
 
     AsyncStorage.setItem('@shoppingList', JSON.stringify(list));
@@ -136,22 +160,39 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
 
   }
 
-  const Item = ({ item }: { item: any }) => {
-    const title = item.title.trim();
-    const itemTitle = title.charAt(0).toUpperCase() + title.slice(1);
+  const Item = ({ item }: { item: _Ingredient }) => {
+    if (item.name === undefined) {
+      return <></>;
+    }
 
     return (
-      <Pressable
-        onPress={() => onItemClick(item)}
-        style={({ pressed }) => ({
-          backgroundColor: pressed
-            ? Colors[scheme].tintBackground
-            : Colors[scheme].background
-        })}>
-        <View style={styles.item}>
-          <Text style={styles.title}>{itemTitle}</Text>
-          <Text style={styles.count}>100gr</Text>
-        </View>
+      <Pressable style={styles.item}>
+        <Pressable
+          onPress={() => onItemClick(item)}
+          style={({ pressed }) => ({
+            backgroundColor: pressed
+              ? Colors[scheme].tintBackground
+              : Colors[scheme].background,
+            ...styles.itemName
+          })}>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.count}>   {item.amount} {item.unit}</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => navigation.navigate('ModalEditItem', item)}
+          style={({ pressed }) => ({
+            backgroundColor: pressed
+              ? Colors[scheme].tintBackground
+              : Colors[scheme].background
+          })}>
+          <View style={styles.itemDetails}>
+            <MaterialIcons
+              name='arrow-forward-ios'
+              size={18}
+              color={Colors[scheme].border}
+            />
+          </View>
+        </Pressable>
       </Pressable>)
   };
 

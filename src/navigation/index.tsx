@@ -21,6 +21,7 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../
 import LinkingConfiguration from './LinkingConfiguration';
 import ModalNewRecipe from '../screens/ModalNewRecipe';
 import ModalDetailRecipe from '../screens/ModalDetailRecipe';
+import ModalEditItem from '../screens/ModalEditItem';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -61,7 +62,7 @@ function RootNavigator() {
         headerStyle: {
           backgroundColor: Colors[colorScheme].tint,
         },
-        headerTintColor: Colors[colorScheme].textOnTint,
+        headerTintColor: Colors[colorScheme].textOnTint
       }}>
       <Stack.Group>
         <Stack.Screen name="Root" component={BottomTabNavigator} options={({ route, navigation }) => ({
@@ -92,6 +93,11 @@ function RootNavigator() {
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'card' }}>
         <Stack.Screen name="ModalDetailRecipe" component={ModalDetailRecipe}
+          options={({ navigation, route }) => ({
+            headerBackTitle: ''
+          })}
+        />
+        <Stack.Screen name="ModalEditItem" component={ModalEditItem}
           options={({ navigation, route }) => ({
             headerBackTitle: ''
           })}
