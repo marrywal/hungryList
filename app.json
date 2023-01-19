@@ -4,11 +4,11 @@
     "slug": "hungryList",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./src/assets/images/favicon.png",
+    "scheme": "hungryList",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./src/assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,12 +23,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/favicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.marrywa.hungryList"
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b867b1db-88a2-4416-86c8-027a46d65cdf"
+      }
     }
   }
 }
