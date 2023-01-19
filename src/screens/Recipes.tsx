@@ -1,4 +1,4 @@
-import { Keyboard, Pressable, SafeAreaView, SectionList, StatusBar, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, Pressable, SafeAreaView, SectionList, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
@@ -11,6 +11,7 @@ import { StyledHeader } from '../components/StyledHeader';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import dynamicSort from '../hooks/dynamicSort';
 import { StyledTextInput } from '../components/StyledTextInput';
+import { useGlobalStyles } from '../constants/styles';
 
 const DEFAULTDATA = [
   {
@@ -167,7 +168,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
   const [retrieve, setRetrieve] = useState(true);
   const [search, setSearch] = useState("");
   const scheme = useColorScheme();
-
+  const styles = useGlobalStyles();
 
   /* TODO:
   - spashscreen
@@ -203,7 +204,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
         setRetrieve(false);
       }
     });
-
   }, [navigation]);
 
   const sortByFavoriteAndTitle = (allItems: _RecipeList[]) => {
@@ -223,89 +223,6 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
       cat.data.push(...notFavItems);
     });
   }
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: StatusBar.currentHeight,
-    },
-    emptyScreen: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100%'
-    },
-    emptyScreenText: {
-      color: Colors[scheme].placeholder,
-      fontSize: 16,
-      marginBottom: 15,
-    },
-    item: {
-      paddingVertical: 0,
-      paddingLeft: 0,
-      paddingRight: 15,
-      borderBottomWidth: 0.25,
-      borderBottomColor: Colors[scheme].border,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: 'transparent'
-    },
-    itemContent: {
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: 'transparent'
-    },
-    titleBox: {
-      flex: 1,
-    },
-    title: {
-      fontSize: 18,
-    },
-    subtitle: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 3,
-    },
-    subtitleText: {
-      fontSize: 14,
-      color: Colors[scheme].secondaryText,
-    },
-    searchbar: {
-      backgroundColor: Colors[scheme].input,
-      paddingVertical: 9,
-      paddingRight: 13,
-      paddingLeft: 35,
-      fontSize: 15,
-      borderRadius: 8,
-      color: Colors[scheme].text,
-      width: '100%',
-      flex: 1,
-    },
-    searchIcon: {
-      color: Colors[scheme].placeholder,
-      paddingVertical: 9,
-      paddingLeft: 13,
-      marginVertical: 10,
-      marginLeft: 13,
-      position: 'absolute',
-      zIndex: 1,
-    },
-    inputContainer: {
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderBottomWidth: 0.25,
-      borderBottomColor: Colors[scheme].border,
-      backgroundColor: Colors[scheme].background,
-      display: 'flex',
-      flexDirection: 'row',
-    },
-  });
 
   const onItemClick = (item: any) => {
     navigation.navigate('ModalDetailRecipe', item);
@@ -411,7 +328,7 @@ export default function Recipes({ navigation }: RootTabScreenProps<'Recipes'>) {
         </View>
         :
         <View style={{ height: '100%' }}>
-          <View style={styles.inputContainer}>
+          <View style={{...styles.inputContainer, ...styles.inputContainerTop}}>
             <MaterialIcons
               name='search'
               size={18}

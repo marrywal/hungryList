@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, SectionList, StatusBar, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Touchable, TouchableOpacity } from "react-native";
+import { SafeAreaView, SectionList, Pressable, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Touchable, TouchableOpacity } from "react-native";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../../types';
 import { Colors } from "../constants/Colors";
@@ -10,6 +10,7 @@ import React from "react";
 import { _Ingredient, _ShoppingList } from "../constants/interfaces";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyledTextInput } from '../components/StyledTextInput';
+import { useGlobalStyles } from "../constants/styles";
 
 export default function ShoppingList({ navigation }: RootTabScreenProps<'ShoppingList'>) {
   const [listItems, setListItems] = useState<_ShoppingList[]>([]);
@@ -17,6 +18,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
   const [newItem, setNewItem] = useState('');
   const scheme = useColorScheme();
   const headerHeight = useHeaderHeight();
+  const styles = useGlobalStyles();
   const listRef = React.useRef<SectionList<_Ingredient, _ShoppingList>>(null)
 
   useEffect(() => {
@@ -39,77 +41,6 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     });
 
   }, [navigation]);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: StatusBar.currentHeight,
-    },
-    emptyScreen: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100%'
-    },
-    emptyScreenText: {
-      color: Colors[scheme].placeholder,
-      fontSize: 16
-    },
-    item: {
-      borderBottomWidth: 0.25,
-      borderBottomColor: Colors[scheme].border,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      width: '100%',
-    },
-    title: {
-      fontSize: 18,
-    },
-    count: {
-      fontSize: 14,
-      color: Colors[scheme].secondaryText,
-    },
-    inputContainer: {
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderTopWidth: 0.25,
-      borderTopColor: Colors[scheme].border,
-      backgroundColor: Colors[scheme].background,
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    sendInput: {
-      flexGrow: 1
-    },
-    sendButton: {
-      backgroundColor: Colors[scheme].tint,
-      borderRadius: 50,
-      width: 34,
-      height: 34,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: 10
-    },
-    itemName: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'baseline',
-      paddingVertical: 13,
-      paddingHorizontal: 20,
-      flex: 2,
-    },
-    itemDetails: {
-      borderLeftWidth: 0.5,
-      borderLeftColor: Colors[scheme].border,
-      paddingVertical: 5,
-      paddingHorizontal: 13,
-      marginVertical: 10,
-
-      flex: 1,
-    },
-  });
 
   const onItemClick = (item: any) => {
     const list = [...listItems];
@@ -166,7 +97,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
     }
 
     return (
-      <Pressable style={styles.item}>
+      <Pressable style={styles.shoppingItem}>
         <Pressable
           onPress={() => onItemClick(item)}
           style={({ pressed }) => ({
@@ -216,7 +147,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
               size={120}
               color={Colors[scheme].border}
             />
-            <Text style={styles.emptyScreenText}>
+            <Text style={styles.emptyScreenTextWithoutMargin}>
               Deine Einkaufsliste ist leer
             </Text>
           </View>
@@ -228,7 +159,7 @@ export default function ShoppingList({ navigation }: RootTabScreenProps<'Shoppin
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inputContainer}>
+        <View style={{...styles.inputContainer, ...styles.inputContainerBottom}}>
           <StyledTextInput
             value={newItem}
             style={styles.sendInput}

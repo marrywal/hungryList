@@ -10,6 +10,7 @@ import { _Category, _Ingredient, _PrepStep, _Recipe, _RecipeList } from '../cons
 import { useNavigation } from '@react-navigation/native';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
+import { useGlobalStyles } from '../constants/styles';
 
 export default function ModalEditItem({ navigation, route }: { navigation: any, route: any }) {
     const [item, setItem] = useState<_Ingredient>(route.params);
@@ -18,6 +19,7 @@ export default function ModalEditItem({ navigation, route }: { navigation: any, 
 
     const scheme = useColorScheme();
     const nav = useNavigation();
+    const styles = useGlobalStyles();
 
 
     useEffect(() => {
@@ -39,47 +41,6 @@ export default function ModalEditItem({ navigation, route }: { navigation: any, 
 
     });
 
-    const styles = StyleSheet.create({
-        container: {
-            paddingTop: 20,
-            paddingHorizontal: 15,
-            backgroundColor: Colors[scheme].background,
-        },
-        containerSeparator: {
-            borderBottomColor: Colors[scheme].input,
-            borderBottomWidth: 1
-        },
-        input: {
-            marginBottom: 20
-        },
-        input60: {
-            width: '60%',
-        },
-        input40: {
-            width: '40%',
-        },
-        inputBox2: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        title: {
-            fontSize: 18,
-            fontWeight: 'bold',
-            marginBottom: 20
-        },
-        inputContainer: {
-            paddingVertical: 10,
-            paddingHorizontal: 15,
-            borderTopWidth: 0.25,
-            borderTopColor: Colors[scheme].border,
-            backgroundColor: Colors[scheme].background,
-            display: 'flex',
-            flexDirection: 'row',
-        },
-    });
-
     const saveItem = async () => {
         const itemsString = await AsyncStorage.getItem('@shoppingList');
         const allItems = itemsString ? JSON.parse(itemsString) : [];
@@ -99,8 +60,8 @@ export default function ModalEditItem({ navigation, route }: { navigation: any, 
 
     return (<>
         <ScrollView>
-            <View style={{ ...styles.container, ...styles.containerSeparator }}>
-                <Text style={styles.title}>{item.name}</Text>
+            <View style={{ ...styles.containerBox, ...styles.containerSeparator }}>
+                <Text style={styles.titleWithSpace}>{item.name}</Text>
                 <View style={styles.inputBox2}>
                     <View style={styles.input60}>
                         <StyledTextInput
@@ -123,7 +84,7 @@ export default function ModalEditItem({ navigation, route }: { navigation: any, 
             </View>
         </ScrollView>
 
-        <View style={styles.inputContainer}>
+        <View style={{...styles.inputContainer, ...styles.inputContainerBottom}}>
             <StyledButtonPressable
                 onPress={saveItem}
                 text='Speichern'

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Colors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import { StyledHeader } from '../components/StyledHeader';
+import { useGlobalStyles } from '../constants/styles';
 const DEFAULTDATA = [
   {
     categoryName: "Anzeige",
@@ -34,31 +35,8 @@ export default function Settings({ navigation }: RootTabScreenProps<'Settings'>)
   const [settings, setSettings] = useState(DEFAULTDATA);
   const scheme = useColorScheme();
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: StatusBar.currentHeight,
-    },
-    title: {
-      fontSize: 18,
-    },
-    separator: {
-      marginVertical: 30,
-      height: 1,
-      width: '80%',
-    },
-    item: {
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderBottomWidth: 0.25,
-      borderBottomColor: Colors[scheme].border,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: 'transparent'
-    },
-  });
+  const styles = useGlobalStyles();
+  
   const Item = ({ item }: { item: any }) => {
     return (
       <Pressable

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, StyleProp, StyleSheet, TouchableWithoutFeedback, ViewStyle } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, StyleProp, TouchableWithoutFeedback, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View } from '../components/Themed';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ import { StyledButtonGroup } from '../components/StyledButtonGroup';
 import { StyledTextInput } from '../components/StyledTextInput';
 import { StyledButtonPressable } from '../components/StyledButtonPressable';
 import { StyledHeader } from '../components/StyledHeader';
+import { useGlobalStyles } from '../constants/styles';
 
 export default function ModalNewRecipe({ navigation, route }: { navigation: any, route: any }) {
   const recipeToEdit = route.params[1];
@@ -35,6 +36,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
     isFavorite: false
   });
   const scheme = useColorScheme();
+  const styles = useGlobalStyles();
   const headerHeight = useHeaderHeight();
   const nav = useNavigation();
 
@@ -70,61 +72,6 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
       </Pressable>,
     });
   }, [navigation]);
-
-  const styles = StyleSheet.create({
-    input60: {
-      width: '60%',
-    },
-    input40: {
-      width: '40%',
-    },
-    inputBox2: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
-    container: {
-      paddingTop: 20,
-      paddingHorizontal: 15,
-      backgroundColor: Colors[scheme].background,
-    },
-    containerSeparator: {
-      borderBottomColor: Colors[scheme].input,
-      borderBottomWidth: 1
-    },
-    secondaryText: {
-      color: Colors[scheme].secondaryText,
-      width: 18,
-      textAlign: 'right'
-    },
-    itemButton: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      flexDirection: 'row',
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-    },
-    input: {
-      marginBottom: 20
-    },
-    inputMultiline: {
-      minHeight: 55,
-      maxHeight: 90,
-      paddingTop: 9,
-      color: Colors[scheme].text
-    },
-    inputContainer: {
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderTopWidth: 0.25,
-      borderTopColor: Colors[scheme].border,
-      backgroundColor: Colors[scheme].background,
-      display: 'flex',
-      flexDirection: 'row',
-    },
-  });
 
   const renderButton = (onClick: () => void, icon: any, buttonStyle: StyleProp<ViewStyle>, buttonText?: string, spacingRight = false) => {
     return <Pressable
@@ -280,7 +227,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ paddingBottom: 25 }}>
-            <View style={styles.container}>
+            <View style={styles.containerBox}>
               <StyledTextInput
                 value={newRecipe.title}
                 style={styles.input}
@@ -323,7 +270,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
                 deleteRow={() => deleteIngredientsRow(index)}
                 key={ingredient.key}
               >
-                <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                <View key={index} style={{ ...styles.containerBox, ...styles.containerSeparator }}>
                   <StyledTextInput
                     value={ingredient.name}
                     style={styles.input}
@@ -367,7 +314,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
                 deleteRow={() => deletePrepStepsRow(index)}
                 key={prep.key}
               >
-                <View key={index} style={{ ...styles.container, ...styles.containerSeparator }}>
+                <View key={index} style={{ ...styles.containerBox, ...styles.containerSeparator }}>
                   <StyledTextInput
                     value={prep.step}
                     style={{ ...styles.input, ...styles.inputMultiline }}
@@ -391,7 +338,7 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
       </KeyboardAvoidingView>
     </ScrollView>
 
-    <View style={styles.inputContainer}>
+    <View style={{...styles.inputContainer, ...styles.inputContainerBottom}}>
       <StyledButtonPressable
         disabledButton={newRecipe.title === ''}
         onPress={saveNewItem}
