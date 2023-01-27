@@ -73,7 +73,8 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         ingPerPerson.forEach((ingr: _Ingredient) => {
             if (ingr.amount) {
                 let amountForAll = parseFloat(ingr.amount.replace(',', '.')) * count;
-                ingr.amount = amountForAll.toString().replace('.', ',');
+                const roundedAmount = Math.round(amountForAll * 100) / 100;
+                ingr.amount = roundedAmount.toString().replace('.', ',');
             }
             ingredients.push(ingr);
         });
