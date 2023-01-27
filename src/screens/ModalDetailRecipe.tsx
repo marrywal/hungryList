@@ -16,8 +16,11 @@ import { useGlobalStyles } from '../constants/styles/globalStyles';
 export default function ModalDetailRecipe({ navigation, route }: { navigation: any, route: any }) {
     const [recipe, setRecipe] = useState<_Recipe>(route.params);
     const [isFavorite, setIsFavorite] = useState<boolean>(recipe.isFavorite);
-    const [personCount, setPersonCount] = useState<number>(2);
+    const [personCount, setPersonCount] = useState<number>(recipe ? recipe.personCount : 2);
     const [countInitial, setCountInitial] = useState(true);
+
+    const [displayedIngredients, setDisplayedIngredients] = useState<_Ingredient[]>([]);
+
     // const [isTooltipOpen, setIsToolTipOpen] = useState<number>(2);
     const scheme = useColorScheme();
     const nav = useNavigation();
@@ -41,7 +44,10 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         });
 
         if (countInitial) {
-            setIngredientsForPersonCount(personCount);
+            const ingr = setIngredientsForPersonCount(personCount);
+            recipe.ingredients = ingr;
+            setRecipe(recipe);
+            setDisplayedIngredients(ingr);
             setCountInitial(false);
         }
     });
@@ -79,8 +85,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
             ingredients.push(ingr);
         });
 
-        recipe.ingredients = ingredients;
-        setRecipe(recipe);
+        return ingredients;
     }
 
     const addIngredientsToShoppingList = () => {
@@ -94,7 +99,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     const sendRecipe = async () => {
         let messageToSend = recipe.title + '\n';
 
-        recipe.ingredients?.forEach(ingr => {
+        displayedIngredients?.forEach(ingr => {
             messageToSend += `\n${ingr.amount} ${ingr.unit} ${ingr.name}`;
         });
 
@@ -188,7 +193,8 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
     }
 
     const countPersonUp = () => {
-        setIngredientsForPersonCount(personCount + 1);
+        const ingr = setIngredientsForPersonCount(personCount + 1);
+        setDisplayedIngredients(ingr);
         setPersonCount(personCount + 1);
     }
 
@@ -196,7 +202,9 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
         if (personCount === 1) {
             return;
         }
-        setIngredientsForPersonCount(personCount - 1);
+
+        const ingr = setIngredientsForPersonCount(personCount - 1);
+        setDisplayedIngredients(ingr);
         setPersonCount(personCount - 1);
     }
 
@@ -208,7 +216,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                     <View style={{ marginBottom: 20 }}>
                         <Text style={styles.smallText}>{recipe.category} {recipe.duration ? '|' : null} {recipe.duration}</Text>
                     </View>
-                    {recipe.ingredients && recipe.ingredients.length > 0 ?
+                    {displayedIngredients && displayedIngredients.length > 0 ?
                         <>
                             <View style={{ ...styles.inputBox2, ...styles.containerSeparatorTop, marginBottom: 10 }}>
                                 <View style={styles.inputBox2}>
@@ -231,11 +239,11 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                     }
                 </View>
 
-                {recipe.ingredients && recipe.ingredients.length > 0 ?
+                {displayedIngredients && displayedIngredients.length > 0 ?
                     <>
-                        <StyledHeader text='Zutaten' count={recipe.ingredients.length} />
+                        <StyledHeader text='Zutaten' count={displayedIngredients.length} />
                         <View style={styles.containerBox}>
-                            {recipe.ingredients.map((ingredient: _Ingredient) => {
+                            {displayedIngredients.map((ingredient: _Ingredient) => {
                                 return <Ingredient key={ingredient.key} content={ingredient} />
                             })}
                         </View>
@@ -275,7 +283,7 @@ export default function ModalDetailRecipe({ navigation, route }: { navigation: a
                         icon='edit'
                         color='default-inverted'
                     />
-                    {recipe.ingredients && recipe.ingredients.length > 0 ?
+                    {displayedIngredients && displayedIngredients.length > 0 ?
                         <StyledButtonPressable
                             onPress={sendRecipe}
                             text='Rezept teilen'
