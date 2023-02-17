@@ -109,7 +109,7 @@ const getGlobalStyles = (scheme: NonNullable<ColorSchemeName>) => StyleSheet.cre
     },
     searchIcon: {
         color: Colors[scheme].placeholder,
-        paddingVertical: 9,
+        paddingVertical: 11,
         paddingLeft: 13,
         marginVertical: 10,
         marginLeft: 13,

@@ -90,7 +90,6 @@ export default function ModalNewRecipe({ navigation, route }: { navigation: any,
   }
 
   const selectCategory = (value: number) => {
-    console.log(value)
     setSelectedIndex(value);
 
     const categories: _Category[] = ["Vorspeise", "Hauptspeise", "Nachspeise", "Getränk", "Snack"];
