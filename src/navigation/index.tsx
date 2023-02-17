@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, StyleSheet } from 'react-native';
 
 import { Colors, NavigationColors } from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -22,6 +22,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import ModalNewRecipe from '../screens/ModalNewRecipe';
 import ModalDetailRecipe from '../screens/ModalDetailRecipe';
 import ModalEditItem from '../screens/ModalEditItem';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -53,16 +54,29 @@ function getHeaderTitle(route: any): string {
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const styles = StyleSheet.create({
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 100,
+  },
+});
+
 function RootNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors[colorScheme].tint,
-        },
-        headerTintColor: Colors[colorScheme].textOnTint
+        headerTintColor: Colors[colorScheme].textOnTint,
+        headerBackground: () => <LinearGradient
+        colors={[Colors[colorScheme].tint, Colors[colorScheme].tintGradient]}
+        style={styles.background}
+        start={[0.4, 0.3]}
+      />,
+      headerTransparent: true
       }}>
       <Stack.Group>
         <Stack.Screen name="Root" component={BottomTabNavigator} options={({ route, navigation }) => ({
